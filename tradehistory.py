@@ -1,104 +1,37 @@
-import http.client
-
-conn = http.client.HTTPSConnection("api.dhan.co")
-
-headers = {
-    'access-token': "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJkaGFuIiwicGFydG5lcklkIjoiIiwiZXhwIjoxNzI4NDg1MTYzLCJ0b2tlbkNvbnN1bWVyVHlwZSI6IlNFTEYiLCJ3ZWJob29rVXJsIjoiIiwiZGhhbkNsaWVudElkIjoiMTEwMzU5OTY3MCJ9.q7bbzSc5jMi16mQBdWSFmVHVXZlYoVTWDTedsvnnRsBkk7XgjLB7_vRIgmeSB5pI7QTZnNWps1lQ064GyzpX-w",
-    'Accept': "application/json"
-}
-
-conn.request("GET", "/tradeHistory/2024-08-01/2024-08-31/0", headers=headers)
-
-res = conn.getresponse()
-data = res.read()
-
-# print(data.decode("utf-8"))
-
+import requests
 import json
 
-json_data = str(data.decode("utf-8"))
+# Define the access token (replace with actual token)
+ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJkaGFuIiwicGFydG5lcklkIjoiIiwiZXhwIjoxNzI4NDg1MTYzLCJ0b2tlbkNvbnN1bWVyVHlwZSI6IlNFTEYiLCJ3ZWJob29rVXJsIjoiIiwiZGhhbkNsaWVudElkIjoiMTEwMzU5OTY3MCJ9.q7bbzSc5jMi16mQBdWSFmVHVXZlYoVTWDTedsvnnRsBkk7XgjLB7_vRIgmeSB5pI7QTZnNWps1lQ064GyzpX-w"
 
-print(json_data)
+# Set up headers for authentication
+headers = {
+    "access-token": ACCESS_TOKEN,
+    "Accept": "application/json"
+}
 
-# # Sample JSON data
-# json_data = """
-# {
-#     "trades": [
-#         [
-#             {
-#                 "dhanClientId": "1103599670",
-#                 "orderId": "5124083056269",
-#                 "exchangeOrderId": "1400000000497334",
-#                 "exchangeTradeId": null,
-#                 "transactionType": "BUY",
-#                 "exchangeSegment": "NSE_EQ",
-#                 "productType": "INTRADAY",
-#                 "orderType": "MARKET",
-#                 "tradingSymbol": null,
-#                 "customSymbol": "Vodafone Idea",
-#                 "securityId": "14366",
-#                 "tradedQuantity": 620,
-#                 "tradedPrice": 16.16,
-#                 "isin": "INE669E01016",
-#                 "instrument": "EQUITY",
-#                 "sebiTax": 0.015,
-#                 "stt": 8.0,
-#                 "brokerageCharges": 1.49,
-#                 "serviceTax": 0.3323,
-#                 "exchangeTransactionCharges": 0.3264,
-#                 "stampDuty": 1.0,
-#                 "createTime": "NA",
-#                 "updateTime": "NA",
-#                 "exchangeTime": "2024-08-30 14:30:58",
-#                 "drvExpiryDate": "NA",
-#                 "drvOptionType": "NA",
-#                 "drvStrikePrice": 0.0
-#             },
-#             {
-#                 "dhanClientId": "1103599670",
-#                 "orderId": "5124083056229",
-#                 "exchangeOrderId": "1400000000497244",
-#                 "exchangeTradeId": null,
-#                 "transactionType": "SELL",
-#                 "exchangeSegment": "NSE_EQ",
-#                 "productType": "INTRADAY",
-#                 "orderType": "MARKET",
-#                 "tradingSymbol": null,
-#                 "customSymbol": "Vodafone Idea",
-#                 "securityId": "14366",
-#                 "tradedQuantity": 620,
-#                 "tradedPrice": 16.15,
-#                 "isin": "INE669E01016",
-#                 "instrument": "EQUITY",
-#                 "sebiTax": 0.01,
-#                 "stt": 0.0,
-#                 "brokerageCharges": 2.98,
-#                 "serviceTax": 0.5981,
-#                 "exchangeTransactionCharges": 0.3224,
-#                 "stampDuty": 0.0,
-#                 "createTime": "NA",
-#                 "updateTime": "NA",
-#                 "exchangeTime": "2024-08-30 14:30:50",
-#                 "drvExpiryDate": "NA",
-#                 "drvOptionType": "NA",
-#                 "drvStrikePrice": 0.0
-#             }
-#         ]
-#     ]
-# }
-# """
+# Function to get trade history for a given date range
+def get_trade_history(from_date, to_date, page=0):
+    url = f"https://api.dhan.co/tradeHistory/{from_date}/{to_date}/{page}"
+    response = requests.get(url, headers=headers)
+    
+    if response.status_code == 200:
+        return response.json()
+    else:
+        raise Exception(f"Error fetching trade history: {response.status_code} - {response.text}")
 
-# Convert JSON string to a Python dictionary
-data2 = json.loads(json_data)
+
+json_data = get_trade_history("2024-08-01", "2024-08-30")
+
+# print headers
+print("Stock Name\tBuying Price\tQuantity\tDate Bought\tTransaction Type")
 
 # Extract specific information
-for trade_group in data2['trades']:
-    for trade in trade_group:
-        # Filter only "BUY" transactions
-        if trade['transactionType'] == "BUY":
-            stock_name = trade['customSymbol']
-            buying_price = trade['tradedPrice']
-            quantity = trade['tradedQuantity']
-            date_bought = trade['exchangeTime']
+for trade in json_data:
+    stock_name = trade['customSymbol']
+    buying_price = trade['tradedPrice']
+    quantity = trade['tradedQuantity']
+    date_bought = trade['exchangeTime']
+    transaction_type = trade['transactionType']
 
-            print(f"Stock Name: {stock_name}, Buying Price: {buying_price}, Quantity: {quantity}, Date Bought: {date_bought}")
+    print(f"{stock_name}\t{buying_price}\t{quantity}\t{date_bought}\t{transaction_type}")
