@@ -1,50 +1,46 @@
 import requests
+import pandas as pd
 
-# Your Dhan API access token
-access_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJkaGFuIiwicGFydG5lcklkIjoiIiwiZXhwIjoxNzI4NDg1MTYzLCJ0b2tlbkNvbnN1bWVyVHlwZSI6IlNFTEYiLCJ3ZWJob29rVXJsIjoiIiwiZGhhbkNsaWVudElkIjoiMTEwMzU5OTY3MCJ9.q7bbzSc5jMi16mQBdWSFmVHVXZlYoVTWDTedsvnnRsBkk7XgjLB7_vRIgmeSB5pI7QTZnNWps1lQ064GyzpX-w"
+# Replace with your actual access token
+ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJkaGFuIiwicGFydG5lcklkIjoiIiwiZXhwIjoxNzI4NDg1MTYzLCJ0b2tlbkNvbnN1bWVyVHlwZSI6IlNFTEYiLCJ3ZWJob29rVXJsIjoiIiwiZGhhbkNsaWVudElkIjoiMTEwMzU5OTY3MCJ9.q7bbzSc5jMi16mQBdWSFmVHVXZlYoVTWDTedsvnnRsBkk7XgjLB7_vRIgmeSB5pI7QTZnNWps1lQ064GyzpX-we"  # Replace with your actual access token
 
-# Set up the headers with your access token
-headers = {
-    'access-token': access_token,
-    'Accept': 'application/json'
-}
+# Base URL for DHAN API
+BASE_URL = "https://api.dhan.co/holdings"
 
-# Define the API endpoint for fetching holdings
-api_url = "https://dhan.co"
-
-try:
-    # Make a GET request to fetch holdings data
-    response = requests.get(api_url, headers=headers)
-
-    # Check if the request was successful
+# Function to fetch holdings data from DHAN API
+def fetch_holdings():
+    url = f"https://api.dhan.co/holdings/api/v1/holdings"  # Endpoint for fetching holdings (adjust if different)
+    headers = {
+        'Authorization': f'Bearer {ACCESS_TOKEN}',
+        'Accept': 'application/json'
+    }
+    response = requests.get(url, headers=headers)
+    
     if response.status_code == 200:
-        # Parse the JSON data returned by the API
-        holdings_data = response.json()
-
-        # Check if the response is a list
-        if isinstance(holdings_data, list):
-            print("Your Current Holdings in Dhan:")
-            print("===================================")
-            for holding in holdings_data:
-                stock_name = holding.get('symbol')
-                quantity = holding.get('quantity')
-                average_price = holding.get('averagePrice')
-                current_price = holding.get('currentPrice')
-                investment_value = holding.get('investmentValue')
-                current_value = holding.get('currentValue')
-
-                print(f"Stock: {stock_name}")
-                print(f"Quantity: {quantity}")
-                print(f"Average Price: {average_price}")
-                print(f"Current Price: {current_price}")
-                print(f"Investment Value: {investment_value}")
-                print(f"Current Value: {current_value}")
-                print("-----------------------------------")
-        else:
-            print("Unexpected response format:", holdings_data)
-
+        return response.json()
     else:
-        print(f"Failed to fetch holdings: {response.status_code} - {response.text}")
+        print(f"Error fetching data: {response.status_code} - {response.text}")
+        return None
 
-except Exception as e:
-    print(f"An error occurred: {e}")
+# Function to save data to Excel
+def save_to_excel(data, filename):
+    # Convert the data into a DataFrame
+    df = pd.DataFrame(data['holdings'])  # Adjust 'holdings' based on actual response structure
+    df.to_excel(filename, index=False, sheet_name='Holdings')
+    print(f"Data saved to {filename}")
+
+def main():
+    # Fetch holdings data
+    holdings_data = fetch_holdings()
+    
+    if holdings_data:
+        # Print data for verification
+        print("Holdings Data:")
+        print(holdings_data)
+        
+        # Save data to Excel
+        filename = "dhan_holdings.xlsx"
+        save_to_excel(holdings_data, filename)
+
+if __name__ == "__main__":
+    main()
