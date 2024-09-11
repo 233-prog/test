@@ -18,14 +18,32 @@ def plot_candlestick(data, ticker_symbol):
         high=data['High'],
         low=data['Low'],
         close=data['Close'],
-        name='Candlestick'
+        name='Candlestick',
+        increasing_line_color='green',   # Set color for increasing candles
+        decreasing_line_color='red',     # Set color for decreasing candles
+        increasing_fillcolor='lightgreen', # Fill color for increasing candles
+        decreasing_fillcolor='lightcoral'  # Fill color for decreasing candles
     )])
 
+    # Update layout for better visibility and continuous pattern
     fig.update_layout(
         title=f'Candlestick Chart for {ticker_symbol}',
         xaxis_title='Date and Time',
         yaxis_title='Price',
-        xaxis_rangeslider_visible=False
+        xaxis_rangeslider_visible=False,
+        xaxis_type='category',  # Set x-axis type to category for continuous plotting
+        width=1000,  # Width of the figure
+        height=600,  # Height of the figure
+        plot_bgcolor='white',  # Background color
+        yaxis=dict(
+            gridcolor='lightgrey',  # Gridline color
+            gridwidth=0.5           # Gridline width
+        ),
+        xaxis=dict(
+            gridcolor='lightgrey',
+            gridwidth=0.5
+        ),
+        margin=dict(l=50, r=50, t=50, b=50)  # Margins around the plot
     )
 
     fig.show()
