@@ -2,18 +2,20 @@ import requests
 import pandas as pd
 
 # Replace with your actual access token
-ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJkaGFuIiwicGFydG5lcklkIjoiIiwiZXhwIjoxNzI4NDg1MTYzLCJ0b2tlbkNvbnN1bWVyVHlwZSI6IlNFTEYiLCJ3ZWJob29rVXJsIjoiIiwiZGhhbkNsaWVudElkIjoiMTEwMzU5OTY3MCJ9.q7bbzSc5jMi16mQBdWSFmVHVXZlYoVTWDTedsvnnRsBkk7XgjLB7_vRIgmeSB5pI7QTZnNWps1lQ064GyzpX-we"  # Replace with your actual access token
+ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJkaGFuIiwicGFydG5lcklkIjoiIiwiZXhwIjoxNzI4NDg1MTYzLCJ0b2tlbkNvbnN1bWVyVHlwZSI6IlNFTEYiLCJ3ZWJob29rVXJsIjoiIiwiZGhhbkNsaWVudElkIjoiMTEwMzU5OTY3MCJ9.q7bbzSc5jMi16mQBdWSFmVHVXZlYoVTWDTedsvnnRsBkk7XgjLB7_vRIgmeSB5pI7QTZnNWps1lQ064GyzpX"  # Replace with your actual access token
 
 # Base URL for DHAN API
 BASE_URL = "https://api.dhan.co/holdings"
 
 # Function to fetch holdings data from DHAN API
 def fetch_holdings():
-    url = f"https://api.dhan.co/holdings/api/v1/holdings"  # Endpoint for fetching holdings (adjust if different)
+    url = BASE_URL  # Endpoint for fetching holdings (adjust if different)
     headers = {
         'Authorization': f'Bearer {ACCESS_TOKEN}',
-        'Accept': 'application/json'
-    }
+    'Accept': 'application/json'
+}
+      
+    
     response = requests.get(url, headers=headers)
     
     if response.status_code == 200:
