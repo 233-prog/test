@@ -22,10 +22,12 @@ def get_trade_history(from_date, to_date, page=0):
         raise Exception(f"Error fetching trade history: {response.status_code} - {response.text}")
 
 
-json_data = get_trade_history("2024-08-01", "2024-08-30")
+json_data = get_trade_history("2024-06-01", "2024-08-30")
 
 # print headers
 print("Stock Name\tBuying Price\tQuantity\tDate Bought\tTransaction Type")
+
+data_rows=[]
 
 # Extract specific information
 for trade in json_data:
