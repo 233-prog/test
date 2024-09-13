@@ -8,8 +8,8 @@ load_dotenv()
 
 def send_simple_email(recipient_email, subject, body):
     # Load email credentials from environment variables
-    email_user = os.getenv('EMAIL_USER')
-    email_pass = os.getenv('EMAIL_PASS')
+    email_user = 'advaykajaria@gmail.com'
+    email_pass = 'Advay@233'
 
     if not email_user or not email_pass:
         print("Email credentials not found. Please set them as environment variables.")
@@ -23,7 +23,7 @@ def send_simple_email(recipient_email, subject, body):
 
     try:
         # Connect to the email server
-        server = smtplib.SMTP('smtp.gmail.com', 587)  # Replace 'smtp.gmail.com' with your email provider's SMTP server
+        server = smtplib.SMTP('advaykajaria@gmail.com', 587)  # Replace 'smtp.gmail.com' with your email provider's SMTP server
         server.starttls()  # Secure the connection
         server.login(email_user, email_pass)  # Log in to the email server
         server.sendmail(email_user, recipient_email, msg.as_string())  # Send the email
@@ -35,7 +35,7 @@ def send_simple_email(recipient_email, subject, body):
 
 def main():
     # Define recipient email, subject, and body of the email
-    recipient_email = "advaykajaria@gmail.com"  # Replace with the recipient's email address
+    recipient_email = "kajaria.amritanshu@gmail.com"  # Replace with the recipient's email address
     subject = "Hello from Python"
     body = "This is a simple text message sent using Python."
 

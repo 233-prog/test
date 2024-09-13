@@ -20,7 +20,7 @@ def fetch_dhan_holdings(api_key):
 
 # Function to extract symbols from holdings
 def extract_symbols(holdings):
-    symbols = {holding['tradingSymbol'] for holding in holdings if 'tradingSymbol' in holding}
+    symbols = {holding['tradingSymbol'+".NS"] for holding in holdings if 'tradingSymbol'+".NS" in holding}
     return list(symbols)
 
 # Function to fetch daily stock data using yfinance
@@ -31,9 +31,6 @@ def fetch_stock_data(tickers):
         if not data.empty:
             stock_data[ticker] = data['Close'].iloc[-1]  # Closing price for today
     return stock_data
-
-print(),
-
 
 # Function to create an Excel file for portfolio holdings
 def create_portfolio_excel(holdings, stock_data):
