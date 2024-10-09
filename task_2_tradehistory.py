@@ -54,6 +54,8 @@ with open(csv_file_name, mode='w', newline='') as file:
     # Write the header row
     writer.writerow(["Stock Name", "Buying Price", "Quantity", "Date Bought", "Transaction Type"])
     
+    #
+
     # Write the data rows
     writer.writerows(data_rows)
 
