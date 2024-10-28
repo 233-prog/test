@@ -1,56 +1,58 @@
-import yfinance as yf
+from datetime import datetime
 import pandas as pd
-import requests
 
+# Sample trades dictionary
+# Each trade entry contains: symbol, buying date, selling date, quantity, and buy price
+trades = [
+    {"symbol": "AAPL", "buying_date": "2024-02-01", "selling_date": "2024-06-01", "quantity": 10, "price": 150},
+    {"symbol": "TSLA", "buying_date": "2024-03-01", "selling_date": "2024-05-15", "quantity": 5, "price": 200},
+]
 
-DHAN_API_URL = "https://api.dhan.co/" 
-API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJkaGFuIiwicGFydG5lcklkIjoiIiwiZXhwIjoxNzMyMjY1OTQzLCJ0b2tlbkNvbnN1bWVyVHlwZSI6IlNFTEYiLCJ3ZWJob29rVXJsIjoiIiwiZGhhbkNsaWVudElkIjoiMTEwMzU5OTY3MCJ9.RDv1yTGL_vMnfmx2s5Z1SdGo6SBCbNs9LMhV0krqp2K5ndMlk_l75XMRRoMWr89-DRAqfVKnzG648Mfl2d8_TQ"
+# Sample LTP data as a dictionary (Date, Symbol) : LTP price
+ltp_data = {
+    ("2024-02-01", "AAPL"): 152,
+    ("2024-03-01", "TSLA"): 210,
+    ("2024-04-01", "AAPL"): 160,
+    ("2024-04-15", "TSLA"): 215,
+    # Add more dates and LTP values as needed
+}
 
-# Fetch stock data from Yahoo Finance
-def fetch_stock_data(symbol, start_date='2024-02-01'):
-    stock = yf.Ticker(symbol + '.NS')
-    data = stock.history(start=start_date)
-    return data
+# Function to get the LTP for a given date and symbol
+def get_ltp(date, symbol):
+    return ltp_data.get((date, symbol), 0)  # Returns 0 if LTP data is not found
 
-# Fetch holdings from Dhan API
-def get_holdings():
-    headers = {'Authorization': f'Bearer {API_KEY}'}
-    response = requests.get(f"{DHAN_API_URL}/holdings", headers=headers)
-    if response.status_code == 200:
-        holdings = response.json()
-        return holdings['data']
+# Initialize list to store results
+results = []
+
+# Current date for calculation
+current_date = datetime.now().date()
+
+# Iterate over each trade and perform calculations based on date conditions
+for trade in trades:
+    symbol = trade["symbol"]
+    buying_date = datetime.strptime(trade["buying_date"], "%Y-%m-%d").date()
+    selling_date = datetime.strptime(trade["selling_date"], "%Y-%m-%d").date()
+    quantity = trade["quantity"]
+    buy_price = trade["price"]
+    
+    # Determine if we need to calculate profit or loss based on date conditions
+    if current_date < selling_date:
+        if current_date >= buying_date:
+            # Get LTP for the current date and calculate profit or loss
+            ltp = get_ltp(current_date.strftime("%Y-%m-%d"), symbol)
+            profit_loss = (ltp - buy_price) * quantity
+        else:
+            profit_loss = 0
     else:
-        print(f"Failed to fetch holdings: {response.status_code}")
-        return None
+        profit_loss = 0
+    
+    # Append the result for each trade
+    results.append({
+        "symbol": symbol,
+        "profit_loss": profit_loss,
+    })
 
-# Calculate profit or loss for a single holding
-def calculate_profit_loss(stock_data, holding):
-    symbol = holding['symbol']
-    quantity = holding['quantity']
-    buy_price = holding['buy_price']
-    latest_price = stock_data['Close'].iloc[-1]
-    profit_loss = (latest_price - buy_price) * quantity
-    return profit_loss
+# Convert results to a DataFrame and print
+df = pd.DataFrame(results)
+print(df)
 
-# Calculate profit or loss for all holdings
-def calculate_all_profits(holdings):
-    results = []
-    for holding in holdings:
-        symbol = holding['symbol']
-        stock_data = fetch_stock_data(symbol)
-        if stock_data is not None and not stock_data.empty:
-            profit_loss = calculate_profit_loss(stock_data, holding)
-            results.append({'symbol': symbol, 'profit_loss': profit_loss})
-    return results
-
-# Save results to Excel
-def save_to_excel(data, filename="profit_loss_report.xlsx"):
-    df = pd.DataFrame(data)
-    df.to_excel(filename, index=False)
-    print(f"Data saved to {filename}")
-
-# Main execution
-holdings = get_holdings()
-if holdings:
-    profits = calculate_all_profits(holdings)
-    save_to_excel(profits)
