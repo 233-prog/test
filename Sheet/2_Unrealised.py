@@ -1,58 +1,80 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import pandas as pd
+import yfinance as yf
 
 # Sample trades dictionary
-# Each trade entry contains: symbol, buying date, selling date, quantity, and buy price
 trades = [
-    {"symbol": "AAPL", "buying_date": "2024-02-01", "selling_date": "2024-06-01", "quantity": 10, "price": 150},
-    {"symbol": "TSLA", "buying_date": "2024-03-01", "selling_date": "2024-05-15", "quantity": 5, "price": 200},
+     {'date': '2023-04-18', 'symbol': 'VOLTAS', 'type': 'BUY', 'qty': 39, 'price': 1311.00, 'amt': -51129.00},
+    {'date': '2023-05-17', 'symbol': 'INDIANHUME', 'type': 'BUY', 'qty': 800, 'price': 323.96, 'amt': -259170.00},
+    {'date': '2023-05-24', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'BUY', 'qty': 1000, 'price': 799.98, 'amt': -799980.00},
+    {'date': '2023-05-27', 'symbol': 'VOLTAS', 'type': 'BUY', 'qty': 211, 'price': 1424.88, 'amt': -300650.00},
+    {'date': '2023-06-13', 'symbol': 'VOLTAS', 'type': 'SELL', 'qty': -39, 'price': 1480.55, 'amt': 57741.00},
+    {'date': '2023-06-13', 'symbol': 'VOLTAS', 'type': 'SELL', 'qty': -211, 'price': 1480.55, 'amt': 312396.00},
+    {'date': '2023-06-13', 'symbol': 'GULPOLY', 'type': 'BUY', 'qty': 1500, 'price': 214.20, 'amt': -321300.00},
+    {'date': '2023-07-11', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'BUY', 'qty': 1000, 'price': 927.50, 'amt': -927500.00},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -201, 'price': 900.00, 'amt': 180900.00},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -5, 'price': 899.80, 'amt': 4499.00},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -92, 'price': 899.70, 'amt': 82772.40},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -4, 'price': 899.65, 'amt': 3598.60},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -351, 'price': 899.60, 'amt': 315759.60},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -4, 'price': 899.55, 'amt': 3598.20},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -11, 'price': 899.50, 'amt': 9894.50},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -8, 'price': 899.45, 'amt': 7195.60},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -69, 'price': 899.40, 'amt': 62058.60},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -30, 'price': 899.35, 'amt': 26980.50},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -55, 'price': 899.30, 'amt': 49461.50},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -8, 'price': 899.25, 'amt': 7194.00},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -16, 'price': 899.20, 'amt': 14387.20},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -18, 'price': 899.15, 'amt': 16184.70},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -12, 'price': 899.10, 'amt': 10789.20},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -116, 'price': 899.05, 'amt': 104289.80},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -38, 'price': 899.05, 'amt': 34163.90},
+    {'date': '2023-07-19', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -149, 'price': 899.00, 'amt': 133951.00},
+    {'date': '2023-07-22', 'symbol': 'ASTRA MICROWAVE LTD', 'type': 'SELL', 'qty': -813, 'price': 904.00, 'amt': 734952.00},
+    {'date': '2023-08-06', 'symbol': 'SHAKTIPUMP', 'type': 'BUY', 'qty': 350, 'price': 4785.66, 'amt': -1674981.00}
 ]
 
-# Sample LTP data as a dictionary (Date, Symbol) : LTP price
-ltp_data = {
-    ("2024-02-01", "AAPL"): 152,
-    ("2024-03-01", "TSLA"): 210,
-    ("2024-04-01", "AAPL"): 160,
-    ("2024-04-15", "TSLA"): 215,
-    # Add more dates and LTP values as needed
-}
 
-# Function to get the LTP for a given date and symbol
-def get_ltp(date, symbol):
-    return ltp_data.get((date, symbol), 0)  # Returns 0 if LTP data is not found
 
-# Initialize list to store results
-results = []
+# Step 2: Read Sheet3 data for additional symbols if required (assuming it's part of the same workbook)
+# If already in trades list, you might skip this step if not needed.
+# sheet3_data = pd.read_excel("your_file.xlsx", sheet_name="Sheet3")
+# trades = pd.concat([trades, sheet3_data], ignore_index=True)
 
-# Current date for calculation
-current_date = datetime.now().date()
+# Step 3: Add columns for yfinance data, dates, and calculations
 
-# Iterate over each trade and perform calculations based on date conditions
-for trade in trades:
-    symbol = trade["symbol"]
-    buying_date = datetime.strptime(trade["buying_date"], "%Y-%m-%d").date()
-    selling_date = datetime.strptime(trade["selling_date"], "%Y-%m-%d").date()
-    quantity = trade["quantity"]
-    buy_price = trade["price"]
-    
-    # Determine if we need to calculate profit or loss based on date conditions
-    if current_date < selling_date:
-        if current_date >= buying_date:
-            # Get LTP for the current date and calculate profit or loss
-            ltp = get_ltp(current_date.strftime("%Y-%m-%d"), symbol)
-            profit_loss = (ltp - buy_price) * quantity
-        else:
-            profit_loss = 0
-    else:
-        profit_loss = 0
-    
-    # Append the result for each trade
-    results.append({
-        "symbol": symbol,
-        "profit_loss": profit_loss,
-    })
+trades['date'] = pd.to_datetime(trades['date'])
+trades['Calculation'] = None
 
-# Convert results to a DataFrame and print
-df = pd.DataFrame(results)
-print(df)
+# Step 4: Get yfinance data starting from 1st February
+symbols = trades['symbol'].unique()
+start_date = "2023-02-01"
+end_date = datetime.today().strftime('%Y-%m-%d')
 
+# Fetch LTP data for each symbol and store in the DataFrame
+for symbol in symbols:
+    data = yf.download(symbol + ".NS", start=start_date, end=end_date)
+    if not data.empty:
+        ltp = data['Close'][-1]  # Get the last closing price as LTP
+        trades.loc[trades['symbol'] == symbol, 'LTP'] = ltp
+
+# Step 5: Import other transaction data for calculations
+# Assuming columns for selling date, buying date, buying price, and quantity bought
+trades['buying_date'] = pd.to_datetime(trades['date'])  # Placeholder if missing data
+trades['selling_date'] = pd.to_datetime("2024-12-31")  # Placeholder if missing data
+trades['buying_price'] = trades['price']
+trades['quantity_bought'] = trades['qty']
+
+# Step 6: Calculate Profit/Loss based on the provided conditions
+def calculate_profit_loss(row):
+    current_date = pd.to_datetime(datetime.now().date())
+    if current_date < row['selling_date']:
+        if current_date >= row['buying_date']:
+            return (row['LTP'] - row['buying_price']) * row['quantity_bought']
+    return 0
+
+trades['Calculation'] = trades.apply(calculate_profit_loss, axis=1)
+
+# Step 7: Save to Excel and print the data
+trades.to_excel("updated_trades_with_LTP_and_PnL.xlsx", index=False)
+print("Data saved to 'updated_trades_with_LTP_and_PnL.xlsx'.")
