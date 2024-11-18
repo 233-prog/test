@@ -1,4 +1,5 @@
 import yfinance as yf
+from docx import Document
 
 # Define the stock ticker for TBZ (Tribhovandas Bhimji Zaveri Ltd)
 ticker_symbol = "TBZ.NS"
@@ -44,3 +45,16 @@ print("\nTechnical Indicators")
 print(f"Relative Strength Index (RSI): {rsi:.2f}")
 print(f"50-Day Moving Average: ₹{fifty_day_ma:.2f}")
 print(f"200-Day Moving Average: ₹{two_hundred_day_ma:.2f}")
+
+
+doc = Document()
+
+
+doc.add_paragraph(f"Tribhovandas Bhimji Zaveri Ltd. (TBZ)")
+doc.add_paragraph(f"200-Day Moving Average: ₹{two_hundred_day_ma:.2f}")
+
+# Save the document
+output_filename = f"{ticker_symbol}_Stock_Info.docx"
+doc.save(output_filename)
+
+print(f"Stock information has been saved to {output_filename}.")

@@ -42,7 +42,7 @@ trades = [
 # trades = pd.concat([trades, sheet3_data], ignore_index=True)
 
 # Step 3: Add columns for yfinance data, dates, and calculations
-
+trades['LTP'] = None
 trades['date'] = pd.to_datetime(trades['date'])
 trades['Calculation'] = None
 

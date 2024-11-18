@@ -26,7 +26,7 @@ df['Funds Balance'] = df['Funds'].cumsum()
 df['Realized P&L Balance'] = df['Realized P&L'].cumsum()
 df['Net Profit'] = df['Funds Balance'] + df['Realized P&L Balance']
 
-# Export to Excel
+
 output_file = 'financial_summary.xlsx'
 df.to_excel(output_file, index=False)
 print(f"Data exported to {output_file}")

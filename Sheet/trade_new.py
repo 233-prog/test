@@ -114,7 +114,8 @@ print(historical_data)
 exit()
 
 
-# # Step 4: Get yfinance data starting from 1st February
+
+# Step 4: Get yfinance data starting from 1st February
 # symbols = trades['symbol'].unique()
 # start_date = "2023-02-01"
 # end_date = datetime.today().strftime('%Y-%m-%d')

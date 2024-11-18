@@ -16,4 +16,4 @@ avg_loss = loss.rolling(window=14).mean().iloc[-1]
 rs = avg_gain / avg_loss
 rsi = 100 - (100 / (1 + rs))
 
-print(avg_gain)
+print(delta)
