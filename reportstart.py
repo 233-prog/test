@@ -27,6 +27,26 @@ avg_loss = loss.rolling(window=14).mean().iloc[-1]
 rs = avg_gain / avg_loss
 rsi = 100 - (100 / (1 + rs))
 
+# position calc
+
+position=(current_price - year_low) / (year_high - year_low) * 100
+position_text= ""
+if position >= 80:
+    position_text= "The stock is in a strong uptrend, near its 1-year high."
+elif 60 <= position < 80:
+    position_text= "The stock shows a moderate uptrend, trending upward but not at its peak."
+elif 40 <= position < 60:
+    position_text= "The stock price is stable, trading around the middle of its 1-year range."
+elif 20 <= position < 40:
+    position_text= "The stock shows a moderate downtrend, below the midpoint of its 1-year range."
+else:
+    position_text= "The stock is in a strong downtrend, near its 1-year low."
+
+print(current_price, year_low, year_high)
+print(position)
+print(position_text)
+exit()
+
 # Print report
 print(f"Tribhovandas Bhimji Zaveri Ltd. (TBZ)")
 print(f"Date: {data.index[-1].date()}")
@@ -45,7 +65,7 @@ print("\nTechnical Indicators")
 print(f"Relative Strength Index (RSI): {rsi:.2f}")
 print(f"50-Day Moving Average: ₹{fifty_day_ma:.2f}")
 print(f"200-Day Moving Average: ₹{two_hundred_day_ma:.2f}")
-
+print(f"The price trend: {position}")
 
 doc = Document()
 
