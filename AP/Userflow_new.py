@@ -14,7 +14,33 @@ def main():
         print("Invalid input. The value must be between 1 and 8 in length.")
         return
     
+def validate_binary(value):
+    if is_string(value):
+        for character in value:
+            if character != '0' and character != '1':
+                return False
+        return True
+    else:
+        return False
 
+def validate_denary(value):
+    if is_string(value):
+        for character in value:
+            if character not in '0123456789':
+                return False
+        return True
+    else:
+        return False
+
+def validate_hex(value):
+    if is_string(value):
+        hex_chars = '0123456789ABCDEFabcdef'
+        for character in value:
+            if character not in hex_chars:
+                return False
+        return True
+    else:
+        return False
 
 if from_NS == 1:  
         if to_NS == 2: 
