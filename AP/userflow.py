@@ -1,7 +1,7 @@
 def main():
     # Taking user input 
-    from_base = int(input("Enter the current number system (1 - Binary, 2 - Decimal, 3 - Hexadecimal): "))
-    to_base = int(input("Enter the number system to covert to (1 - Binary, 2 - Decimal, 3 - Hexadecimal): "))
+    from_base = input("Enter the current number system (1 - Binary, 2 - Decimal, 3 - Hexadecimal): ")
+    to_base = input("Enter the number system to covert to (1 - Binary, 2 - Decimal, 3 - Hexadecimal): ")
     
     # =validation
     while True:
