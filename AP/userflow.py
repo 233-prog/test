@@ -1,7 +1,7 @@
 def main():
     # Taking user input 
-    from_base = input("Enter the current number system (1 - Binary, 2 - Decimal, 3 - Hexadecimal): ")
-    to_base = input("Enter the number system to covert to (1 - Binary, 2 - Decimal, 3 - Hexadecimal): ")
+    from_NS = input("Enter the current number system (1 - Binary, 2 - Decimal, 3 - Hexadecimal): ")
+    to_NS = input("Enter the number system to covert to (1 - Binary, 2 - Decimal, 3 - Hexadecimal): ")
     
     # =validation
     while True:
@@ -10,6 +10,37 @@ def main():
             break
         else:
             print("Invalid input: value length must be between 1 and 8 characters.")
+
+
+            def is_string(value):
+
+    return isinstance(value, str)
+
+def validate_binary(value):
+    return is_string(value) and all(char in '01' for char in value)
+
+def validate_decimal(value):
+    return is_string(value) and all('0' <= char <= '9' for char in value)
+
+def validate_hex(value):
+    return is_string(value) and all(char in "0123456789ABCDEFabcdef" for char in value)
+
+def convert_binary_to_decimal(value):
+  
+
+def convert_decimal_to_binary(value):
+   
+def convert_decimal_to_hex(value):
+   
+def convert_hex_to_decimal(value):
+  
+
+def convert_binary_to_hex(value):
+ 
+
+def convert_hex_to_binary(value):
+   
+
             
     # Print 
     print(f"From Number System: {from_base}")
