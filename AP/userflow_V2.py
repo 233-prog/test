@@ -22,14 +22,14 @@ def convert_binary_to_decimal(value):
     position_counter = 0
     for bit in reversed(value):
         decimal_value += int(bit) * (2 ** position_counter)
-        position_counter += 1
+        position_counter = position_counter + 1
     return decimal_value
 
 def convert_decimal_to_binary(value):
    binary_str = ""
    while decimal_value > 0:
         remainder = decimal_value % 2
-        binary_str += str(remainder)
+        binary_str = binary_str + str(remainder)
         decimal_value = decimal_value // 2  
    #return binary_str[::-1]
 
