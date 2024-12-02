@@ -18,7 +18,14 @@ def validate_hex(value):
     return True
 
 def convert_binary_to_decimal(value):
-    pass
+    decimal_value = 0
+    position_counter = 0
+
+    for bit in reversed(value):
+        decimal_value += int(bit) * (2 ** position_counter)
+        position_counter += 1
+
+    return decimal_value
 
 def convert_decimal_to_binary(value):
     pass
