@@ -20,15 +20,18 @@ def validate_hex(value):
 def convert_binary_to_decimal(value):
     decimal_value = 0
     position_counter = 0
-
     for bit in reversed(value):
         decimal_value += int(bit) * (2 ** position_counter)
         position_counter += 1
-
     return decimal_value
 
 def convert_decimal_to_binary(value):
-    pass
+   binary_str = ""
+   while decimal_value > 0:
+        remainder = decimal_value % 2
+        binary_str += str(remainder)
+        decimal_value //= 2  
+   return binary_str[::-1]
 
 def convert_decimal_to_hex(value):
     pass
