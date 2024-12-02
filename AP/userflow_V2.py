@@ -60,17 +60,17 @@ def main():
         if validate_binary(value):
             is_valid = True
         else:
-            print("Error: The value you entered is not a valid binary number. Binary numbers can only contain 0 and 1.")
+            print("Error: The value entered is not a valid binary number.")
     elif from_NS == 2: 
         if validate_decimal(value):
             is_valid = True
         else:
-            print("Error: The value you entered is not a valid decimal number. Decimal numbers can only contain digits 0-9.")
+            print("Error: The value entered is not a valid decimal number.")
     elif from_NS == 3: 
         if validate_hex(value):
             is_valid = True
         else:
-            print("Error: The value you entered is not a valid hexadecimal number. Hexadecimal numbers can contain digits 0-9 and letters A-F (case insensitive).")
+            print("Error: The value entered is not a valid hexadecimal number.")
     else:
         print("Error: The selected number system is invalid.")
         return
