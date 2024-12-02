@@ -30,14 +30,21 @@ def convert_decimal_to_binary(value):
    while decimal_value > 0:
         remainder = decimal_value % 2
         binary_str += str(remainder)
-        decimal_value //= 2  
-   return binary_str[::-1]
+        decimal_value = decimal_value // 2  
+   #return binary_str[::-1]
 
 def convert_decimal_to_hex(value):
-    pass
+    Hex = {0: "0", 1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7", 8: "8", 9: "9", 10: "A", 11: "B", 12: "C", 13: "D", 14: "E", 15: "F"}
+    hex_digits = []
+    while decimal_value > 0:
+        remainder = decimal_value % 16
+        hex_digits.append(Hex[remainder])
+        decimal_value = decimal_value // 16
 
 def convert_hex_to_decimal(value):
-    pass
+    hex_values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+# if '0' <= value <= '9':
+# elif 'A' <= value <= 'F':
 
 def convert_binary_to_hex(value):
     pass
