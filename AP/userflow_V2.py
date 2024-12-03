@@ -26,31 +26,45 @@ def convert_binary_to_decimal(value):
     return decimal_value
 
 def convert_decimal_to_binary(value):
-   binary_str = ""
-   while decimal_value > 0:
+    decimal_value = int(value) 
+    binary_str = ""
+    while decimal_value > 0:
         remainder = decimal_value % 2
         binary_str = binary_str + str(remainder)
-        decimal_value = decimal_value // 2  
-   #return binary_str[::-1]
-
+        decimal_value = decimal_value // 2 
+    return binary_str[::-1]
+  
 def convert_decimal_to_hex(value):
     Hex = {0: "0", 1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7", 8: "8", 9: "9", 10: "A", 11: "B", 12: "C", 13: "D", 14: "E", 15: "F"}
     hex_digits = []
+    decimal_value = int(value)
     while decimal_value > 0:
         remainder = decimal_value % 16
         hex_digits.append(Hex[remainder])
         decimal_value = decimal_value // 16
+    return hex_digits[::-1]
 
 def convert_hex_to_decimal(value):
-    hex_values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-# if '0' <= value <= '9':
-# elif 'A' <= value <= 'F':
+    hex_values = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5,'6': 6, '7': 7, '8': 8, '9': 9, 'A': 10, 'B': 11,'C': 12, 'D': 13, 'E': 14, 'F': 15}
+    decimal_value = 0
+    position = 0
+    for char in value[::-1]:
+        hex_digit_value = hex_values[char.upper()]
+        power_of_16 = 16 ** position
+        value = hex_digit_value * power_of_16
+        decimal_value = decimal_value+ value
+        position = position + 1
+    return decimal_value
 
-def convert_binary_to_hex(value):
-    pass
+def convert_binary_to_hex(value):   
+        pass
 
 def convert_hex_to_binary(value):
-    pass
+    HEX_TO_BINARY = {'0': "0000", '1': "0001", '2': "0010", '3': "0011", '4': "0100", '5': "0101", '6': "0110", '7': "0111", '8': "1000", '9': "1001", 'A': "1010", 'B': "1011", 'C': "1100", 'D': "1101", 'E': "1110", 'F': "1111"}
+    binary_result = ""
+    for char in value:
+        binary_result = binary_result + HEX_TO_BINARY[char.upper()]
+    return binary_result
 
 def main():
     from_NS = int(input("Choose the current Number System (1 - Binary, 2 - Decimal, 3 - Hexadecimal): "))
