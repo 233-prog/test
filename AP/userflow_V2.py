@@ -42,7 +42,7 @@ def convert_decimal_to_hex(value):
         remainder = decimal_value % 16
         hex_digits.append(Hex[remainder])
         decimal_value = decimal_value // 16
-    return hex_digits[::-1]
+    return "".join(hex_digits[::-1])
 
 def convert_hex_to_decimal(value):
     hex_values = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5,'6': 6, '7': 7, '8': 8, '9': 9, 'A': 10, 'B': 11,'C': 12, 'D': 13, 'E': 14, 'F': 15}
