@@ -38,15 +38,13 @@ while second_card_suit not in valid_suits:
     second_card_suit = input("Type the suit (S, H, D, C): ")
     second_card_suit = second_card_suit.strip()
 
-while True:
+board_count_input = input("How many community cards do you want to enter (0, 3, 4, 5)? ").strip()
+board_count = int(board_count_input)
+
+while board_count not in valid_board:
+    print("Invalid number of community cards. Valid options are: 0, 3, 4, 5.")
     board_count_input = input("How many community cards do you want to enter (0, 3, 4, 5)? ").strip()
-    
     board_count = int(board_count_input)
-    
-    if board_count not in valid_board:
-        print("Invalid number of community cards. Valid options are: 0, 3, 4, 5.")
-    else:
-        break 
 
 board_cards = []
 
@@ -71,8 +69,3 @@ print(f"The first card is: {first_card_rank}{first_card_suit}, "
       f"The second card is: {second_card_rank}{second_card_suit}")
 print(f"Number of community cards: {board_count}")
 print(f"Community Cards: {board_cards}")
-
-
-
-
-
