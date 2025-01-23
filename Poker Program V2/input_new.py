@@ -45,6 +45,9 @@ def get_board_cards():
             print("Invalid number of community cards. Valid options are: 0, 3, 4, 5.")
         board_count_input = input("How many community cards do you want to enter (0, 3, 4, 5)? ").strip()
 
+        board_count_valid = board_count_input.isdigit()  
+        board_count_value = int(board_count_input)
+
     board_count = int(board_count_input)
     
     if board_count > 0:
@@ -55,7 +58,7 @@ def get_board_cards():
     return board_cards
 
 def user_input():
-    user_cards = cards_input("user", 2)  
+    user_cards = cards_input("user", 2) 
     
     board_cards = get_board_cards()
     
