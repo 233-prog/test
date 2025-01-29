@@ -1,5 +1,3 @@
-from collections import Counter
-
 def is_valid_card(card, valid_ranks, valid_suits):
     card_length = len(card)
     if card_length != 2:
@@ -51,9 +49,6 @@ def user_input():
             print("Duplicate cards detected. Please enter unique cards.")
             continue  
 
-        print(f"Your user cards are: {user_cards}")
-        print(f"Board cards: {board_cards}")
-
         user_cards_tuples = []
         for card in user_cards:
             rank = card[0]
@@ -65,9 +60,8 @@ def user_input():
             rank = card[0]
             suit = card[1]
             board_cards_tuples.append((rank, suit))
-        return user_cards_tuples, board_cards_tuples
-        break   
+        return user_cards_tuples, board_cards_tuples     
+     
 user_cards_tuples, board_cards_tuples = user_input()
-
 print(f"User cards as tuples: {user_cards_tuples}")
 print(f"Board cards as tuples: {board_cards_tuples}")
