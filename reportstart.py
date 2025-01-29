@@ -42,10 +42,6 @@ elif 20 <= position < 40:
 else:
     position_text= "The stock is in a strong downtrend, near its 1-year low."
 
-print(current_price, year_low, year_high)
-print(position)
-print(position_text)
-exit()
 
 # Print report
 print(f"Tribhovandas Bhimji Zaveri Ltd. (TBZ)")
@@ -65,7 +61,7 @@ print("\nTechnical Indicators")
 print(f"Relative Strength Index (RSI): {rsi:.2f}")
 print(f"50-Day Moving Average: ₹{fifty_day_ma:.2f}")
 print(f"200-Day Moving Average: ₹{two_hundred_day_ma:.2f}")
-print(f"The price trend: {position}")
+print(f"The price trend: {position_text}")
 
 doc = Document()
 
