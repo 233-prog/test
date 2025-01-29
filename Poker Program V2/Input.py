@@ -1,3 +1,5 @@
+from collections import Counter
+
 def is_valid_card(card, valid_ranks, valid_suits):
     card_length = len(card)
     if card_length != 2:
@@ -64,7 +66,7 @@ def user_input():
             suit = card[1]
             board_cards_tuples.append((rank, suit))
         return user_cards_tuples, board_cards_tuples
-
+        break   
 user_cards_tuples, board_cards_tuples = user_input()
 
 print(f"User cards as tuples: {user_cards_tuples}")
