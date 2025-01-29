@@ -22,7 +22,7 @@ def cards_input(cards_type, valid_counts):
         cards_list = cards_input.split()
 
         if len(cards_list) not in valid_counts:  
-            print("Please enter one of these numbers of cards: 0, 3, 4, or 5.")
+            print("Invalid format pls recheck.")
             continue
 
         if check_duplicates(cards_list):
@@ -40,15 +40,31 @@ def cards_input(cards_type, valid_counts):
             return cards_list
 
 def user_input():
-    user_cards = cards_input("user", [2])  
-    board_cards = cards_input("board", [0, 3, 4, 5])  
+    while True:
+        user_cards = cards_input("user", [2])  
+        board_cards = cards_input("board", [0, 3, 4, 5])  
 
-    combined_cards = user_cards + board_cards
-    if check_duplicates(combined_cards):
-        print("Duplicate cards detected. Please enter unique cards.")
-        return user_input()  
+        combined_cards = user_cards + board_cards
+        if check_duplicates(combined_cards):
+            print("Duplicate cards detected. Please enter unique cards.")
+            continue  
 
-    print(f"Your user cards are: {user_cards}")
-    print(f"Board cards: {board_cards}")
+        print(f"Your user cards are: {user_cards}")
+        print(f"Board cards: {board_cards}")
+
+        user_cards_tuples = []
+        for card in user_cards:
+            rank = card[0]
+            suit = card[1]
+            user_cards_tuples.append((rank, suit))
+
+        board_cards_tuples = []
+        for card in board_cards:
+            rank = card[0]
+            suit = card[1]
+            board_cards_tuples.append((rank, suit))
+
+        print(f"User cards as tuples: {user_cards_tuples}")
+        print(f"Board cards as tuples: {board_cards_tuples}")
 
 user_input()
