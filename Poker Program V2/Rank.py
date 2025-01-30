@@ -101,7 +101,6 @@ def evaluate_hand(cards):
         if count == 4:
             four_of_a_kind = "Four of a Kind"
             return four_of_a_kind, rank
-
     
     #Full House
     three_of_a_kind_rank = None
