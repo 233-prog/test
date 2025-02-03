@@ -72,7 +72,6 @@ def is_sequence(ranks):
     rank_values_list = []
     for rank in ranks:
         rank_values_list.append(card_value[rank])
-    
     rank_values_list.sort()
 
     for i in range(len(rank_values_list) - 1):
@@ -141,14 +140,20 @@ def evaluate_hand(cards):
     for suit, count in suit_count.items():
         if count >= 5:
             return "Flush", suit
-
-    # Straight
+        
+    #Straight
     rank_values = []
     for rank in rank_list:
         rank_values.append(card_value[rank])
-    if is_sequence(rank_values):
+    rank_values.sort()
+    is_straight = True
+    for i in range(len(rank_values) - 1):
+        if rank_values[i] + 1 != rank_values[i + 1]:
+            is_straight = False
+            break
+    if is_straight:
         return "Straight"
-    
+
     #Three of a Kind
     for rank, count in rank_count.items():
         if count == 3:
