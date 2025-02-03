@@ -66,21 +66,32 @@ user_cards_tuples, board_cards_tuples = user_input()
 print(f"User cards as tuples: {user_cards_tuples}")
 print(f"Board cards as tuples: {board_cards_tuples}")
 
-from collections import Counter
-
 card_value = {"2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "T": 10,"J": 11, "Q": 12, "K": 13, "A": 14}
 
 def is_sequence(ranks):
-    rank_values_list = [card_value[rank] for rank in ranks]
-    sorted_rank_values = sorted(rank_values_list)
+    rank_values_list = []
+    for rank in ranks:
+        rank_values_list.append(card_value[rank])
     
-    j = 0
-    while j < len(sorted_rank_values) - 1:
-        next_value = sorted_rank_values[j] + 1
-        if next_value != sorted_rank_values[j + 1]:
+    rank_values_list.sort()
+
+    for i in range(len(rank_values_list) - 1):
+        current_value = rank_values_list[i]
+        next_value = rank_values_list[i + 1]
+        expected_next_value = current_value + 1
+        if next_value != expected_next_value:
             return False
-        j = j + 1
+    
     return True
+
+def count_elements(elements):
+    count_dict = {}
+    for element in elements:
+        if element in count_dict:
+            count_dict[element] = count_dict[element] + 1
+        else:
+            count_dict[element] = 1
+    return count_dict
 
 def evaluate_hand(cards):
     rank_list = []
@@ -91,11 +102,22 @@ def evaluate_hand(cards):
     for card in cards:
         suit_list.append(card[1])
         
-    rank_count = Counter(rank_list)
-    suit_count = Counter(suit_list)
+    rank_count = count_elements(rank_list)
+    suit_count = count_elements(suit_list)
 
     #Straight Flush
-    
+    for suit, count in suit_count.items():
+        if count >= 5:
+            suited_cards = []
+            for card in cards:
+                if card[1] == suit:
+                    suited_cards.append(card)
+            suited_ranks = []
+            for card in suited_cards:
+                suited_ranks.append(card[0])
+            if is_sequence(suited_ranks):
+                return "Straight Flush", suit
+
     #Four of a Kind
     for rank, count in rank_count.items():
         if count == 4:
@@ -115,13 +137,16 @@ def evaluate_hand(cards):
         return "Full House", three_of_a_kind_rank, pair_rank
 
     
-    #Flush
-    for suit_key, suit_count in suit_count.items():
-        if suit_count >= 5:
-            return "Flush",suit_key
-    
-    #Straight
-    if is_sequence(rank_list):    
+    # Flush
+    for suit, count in suit_count.items():
+        if count >= 5:
+            return "Flush", suit
+
+    # Straight
+    rank_values = []
+    for rank in rank_list:
+        rank_values.append(card_value[rank])
+    if is_sequence(rank_values):
         return "Straight"
     
     #Three of a Kind
@@ -130,16 +155,28 @@ def evaluate_hand(cards):
             return "Three of a Kind", rank
     
     #Two Pair
-    all_pairs = [rank for rank, count in rank_count.items() if count == 2]
+    all_pairs = []
+    for rank, count in rank_count.items():
+        if count == 2:
+            all_pairs.append(rank)
     if len(all_pairs) >= 2:
-        return "Two Pair"
-    
+        return "Two Pair", all_pairs
+
     #One Pair
     for rank, count in rank_count.items():
         if count == 2:
             return "One Pair", rank
 
-    return "High Card", rank_list[0]  
+    # High card
+    rank_values_sorted = []
+    for rank in rank_list:
+        rank_value = card_value[rank]
+        rank_values_sorted.append(rank_value)
+    rank_values_sorted.sort(reverse=True)
+    highest_value = max(rank_values_sorted)
+    high_card_index = rank_values_sorted.index(highest_value)
+    high_card = rank_list[high_card_index]
+    print("High Card:", high_card)
 
 hand_result = evaluate_hand(user_cards_tuples + board_cards_tuples)
 print(f"The hand formed is: {hand_result}")

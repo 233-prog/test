@@ -61,7 +61,7 @@ def user_input():
             suit = card[1]
             board_cards_tuples.append((rank, suit))
         return user_cards_tuples, board_cards_tuples     
-     
+
 user_cards_tuples, board_cards_tuples = user_input()
 print(f"User cards as tuples: {user_cards_tuples}")
 print(f"Board cards as tuples: {board_cards_tuples}")
