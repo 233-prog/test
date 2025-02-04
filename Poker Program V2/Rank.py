@@ -71,10 +71,17 @@ card_value = {"2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "T
 def is_sequence(ranks):
     rank_values_list = []
     for rank in ranks:
-        rank_values_list.append(card_value[rank])
+        if rank == "A":
+            rank_values_list.append(1) 
+            rank_values_list.append(14)  
+        else:
+            rank_values_list.append(card_value[rank])
+    unique_rank_values = set(rank_values_list)
+    rank_values_list = list(unique_rank_values)  
     rank_values_list.sort()
 
-    for i in range(len(rank_values_list) - 1):
+    range_end = len(rank_values_list) - 1
+    for i in range(range_end):
         current_value = rank_values_list[i]
         next_value = rank_values_list[i + 1]
         expected_next_value = current_value + 1
