@@ -128,14 +128,14 @@ def evaluate_hand(cards):
     suit = is_flush(cards)
     if suit:
         suited_cards = []
-    for card in cards:
-        if card[1] == suit:
-            suited_cards.append(card)
+        for card in cards:
+            if card[1] == suit:
+             suited_cards.append(card)
     
-    suited_ranks = []
-    for card in suited_cards:
-        suited_ranks.append(card[0])
-        return "Straight Flush"
+        suited_ranks = []
+        for card in suited_cards:
+            suited_ranks.append(card[0])
+            return "Straight Flush"
 
     #Four of a Kind
     for rank, count in rank_count.items():
@@ -155,7 +155,6 @@ def evaluate_hand(cards):
     if three_of_a_kind_rank and pair_rank:
         return "Full House", three_of_a_kind_rank, pair_rank
 
-    
     # Flush
     flush_suit = is_flush(cards)
     if flush_suit:
