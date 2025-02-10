@@ -1,5 +1,3 @@
-from collections import Counter
-
 def is_valid_card(card, valid_ranks, valid_suits):
     card_length = len(card)
     if card_length != 2:
@@ -51,16 +49,24 @@ def user_input():
             print("Duplicate cards detected. Please enter unique cards.")
             continue  
 
-        user_cards_tuples = [(card[0], card[1]) for card in user_cards]
-        board_cards_tuples = [(card[0], card[1]) for card in board_cards]
-        return user_cards_tuples, board_cards_tuples
+        user_cards_tuples = []
+        for card in user_cards:
+            rank = card[0]
+            suit = card[1]
+            user_cards_tuples.append((rank, suit))
 
-def card_rank(card):
-    ranks_order = {"2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "T": 10, "J": 11, "Q": 12, "K": 13, "A": 14}
-    return ranks_order[card[0]]
+        board_cards_tuples = []
+        for card in board_cards:
+            rank = card[0]
+            suit = card[1]
+            board_cards_tuples.append((rank, suit))
+        return user_cards_tuples, board_cards_tuples     
 
-def card_rank_descending(card):
-    return -card_rank(card)
+user_cards_tuples, board_cards_tuples = user_input()
+print(f"User cards as tuples: {user_cards_tuples}")
+print(f"Board cards as tuples: {board_cards_tuples}")
+
+from collections import Counter
 
 def is_flush(cards, suit_count):
     for suit in suit_count:
@@ -71,8 +77,14 @@ def is_flush(cards, suit_count):
             return "Flush", highest_five
     return None
 
+def card_rank(card):
+    return card[0]  
+
+def card_rank_descending(card):
+    ranks_order = {"2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "T": 10, "J": 11, "Q": 12, "K": 13, "A": 14}
+    return -ranks_order[card[0]]  
+
 def get_highest_five(cards):
-    cards.sort(key=card_rank_descending)
     return cards[:5]
 
 def is_straight(cards):
@@ -84,15 +96,9 @@ def is_straight(cards):
     return None
 
 def is_straight_sequence(cards):
-    # Ace can be low (A, 2, 3, 4, 5) or high (10, J, Q, K, A)
-    ranks = [card_rank(card) for card in cards]
-    ranks = sorted(set(ranks))  # remove duplicates and sort
-    for i in range(len(ranks) - 4):
-        if ranks[i + 4] - ranks[i] == 4:
+    for i in range(len(cards) - 4):
+        if cards[i][0] - cards[i + 4][0] == 4:  
             return True
-    # Check for Ace-low straight: A, 2, 3, 4, 5
-    if set([2, 3, 4, 5, 14]).issubset(ranks):
-        return True
     return False
 
 def straight_flush(cards, suit_count):
@@ -134,6 +140,9 @@ def full_house(rank_count):
 def flush(cards, suit_count):
     return is_flush(cards, suit_count)
 
+def straight(cards):
+    return is_straight(cards)
+
 def three_of_a_kind(rank_count):
     three_kind_ranks = []
     for rank in rank_count:
@@ -167,11 +176,10 @@ def high_card(cards):
     highest_card = max(cards, key=card_rank)  
     return "High Card", highest_card
 
-def rank_hand(cards):
+def evaluate_hand(cards):
     rank_count = Counter(card[0] for card in cards)
     suit_count = Counter(card[1] for card in cards)
 
-    # Check for the best possible hand
     result = straight_flush(cards, suit_count)
     if result:
         return result
@@ -205,28 +213,3 @@ def rank_hand(cards):
         return result
 
     return high_card(cards)
-
-def user_input():
-    while True:
-        user_cards = cards_input("user", [2])  
-        board_cards = cards_input("board", [0, 3, 4, 5])  
-
-        combined_cards = user_cards + board_cards
-        if check_duplicates(combined_cards):
-            print("Duplicate cards detected. Please enter unique cards.")
-            continue  
-
-        user_cards_tuples = [(card[0], card[1]) for card in user_cards]
-        board_cards_tuples = [(card[0], card[1]) for card in board_cards]
-
-        # Rank the hand
-        hand_rank, *hand_details = rank_hand(user_cards_tuples + board_cards_tuples)
-        print(f"Hand rank: {hand_rank}")
-        if hand_details:
-            print(f"Hand details: {hand_details}")
-
-        return user_cards_tuples, board_cards_tuples
-
-user_cards_tuples, board_cards_tuples = user_input()
-print(f"User cards as tuples: {user_cards_tuples}")
-print(f"Board cards as tuples: {board_cards_tuples}")
