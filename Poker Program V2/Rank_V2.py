@@ -66,57 +66,51 @@ user_cards_tuples, board_cards_tuples = user_input()
 print(f"User cards as tuples: {user_cards_tuples}")
 print(f"Board cards as tuples: {board_cards_tuples}")
 
-from collections import Counter
-
-def is_flush(cards, suit_count):
-    for suit in suit_count:
-        if suit_count[suit] >= 5:
-            flush_cards = [card for card in cards if card[1] == suit] 
-            flush_cards.sort(key=card_rank_descending)  
-            highest_five = flush_cards[:5]
-            return "Flush", highest_five
-    return None
+ranks_order = {"2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "T": 10, "J": 11, "Q": 12, "K": 13, "A": 14}
 
 def card_rank(card):
-    return card[0]  
+    return ranks_order[card[0]]
 
 def card_rank_descending(card):
-    ranks_order = {"2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "T": 10, "J": 11, "Q": 12, "K": 13, "A": 14}
-    return -ranks_order[card[0]]  
+    return -ranks_order[card[0]]
 
 def get_highest_five(cards):
-    return cards[:5]
+    return sorted(cards, key=card_rank_descending)[:5]
 
 def is_straight(cards):
-    if len(cards) >= 5:
-        cards.sort(key=card_rank_descending)  
-        if is_straight_sequence(cards):
-            sequence = get_highest_five(cards)
-            return "Straight", sequence
-    return None
-
-def is_straight_sequence(cards):
+    cards.sort(key=card_rank_descending)
     for i in range(len(cards) - 4):
-        if cards[i][0] - cards[i + 4][0] == 4:  
+        if ranks_order[cards[i][0]] - ranks_order[cards[i + 4][0]] == 4:
             return True
     return False
 
-def straight_flush(cards, suit_count):
+def evaluate_hand(cards):
+    rank_count = {}
+    suit_count = {}
+
+    for card in cards:
+        rank, suit = card
+        if rank in rank_count:
+            rank_count[rank] += 1
+        else:
+            rank_count[rank] = 1
+        
+        if suit in suit_count:
+            suit_count[suit] += 1
+        else:
+            suit_count[suit] = 1
+#STRAIGHT FLUSH
     for suit in suit_count:
         if suit_count[suit] >= 5:
-            suited_cards = [card for card in cards if card[1] == suit]  
+            suited_cards = [card for card in cards if card[1] == suit]
             if is_straight(suited_cards):
                 sequence = get_highest_five(suited_cards)
                 return "Straight Flush", sequence
-    return None
-
-def four_of_a_kind(rank_count):
-    for rank in rank_count:
-        if rank_count[rank] == 4:
+#QUADS
+    for rank, count in rank_count.items():
+        if count == 4:
             return "Four of a Kind", rank
-    return None
-
-def full_house(rank_count):
+#FH
     three_list = []
     pair_list = []
     for rank in rank_count:
@@ -124,7 +118,7 @@ def full_house(rank_count):
             three_list.append(rank)
         elif rank_count[rank] >= 2:
             pair_list.append(rank)
-    
+
     if len(three_list) >= 2:
         three_list.sort(reverse=True)
         trips = three_list[0]
@@ -132,84 +126,39 @@ def full_house(rank_count):
         return "Full House", trips, pair
     elif len(three_list) == 1 and len(pair_list) >= 1:
         trips = three_list[0]
-        pair_list.sort(reverse=True)
-        pair = pair_list[0]
+        pair = pair_list[0] if len(pair_list) > 0 else None
         return "Full House", trips, pair
-    return None
-
-def flush(cards, suit_count):
-    return is_flush(cards, suit_count)
-
-def straight(cards):
-    return is_straight(cards)
-
-def three_of_a_kind(rank_count):
-    three_kind_ranks = []
-    for rank in rank_count:
-        if rank_count[rank] == 3:
-            three_kind_ranks.append(rank)
-    if len(three_kind_ranks) > 0:
-        three_kind_ranks.sort(reverse=True)
-        highest_three = three_kind_ranks[0]
-        return "Three of a Kind", highest_three
-    return None
-
-def two_pair(rank_count):
-    pair_ranks = []
-    for rank in rank_count:
-        if rank_count[rank] == 2:
-            pair_ranks.append(rank)
+#FLUSH
+    for suit in suit_count:
+        if suit_count[suit] >= 5:
+            flush_cards = [card for card in cards if card[1] == suit]
+            flush_cards = get_highest_five(flush_cards)
+            return "Flush", flush_cards
+#STRAIGHT
+    if is_straight(cards):
+        sequence = get_highest_five(cards)
+        return "Straight", sequence
+#TRIPS
+    for rank, count in rank_count.items():
+        if count == 3:
+            return "Three of a Kind", rank
+#DOUBLE PAIR
+    pair_ranks = [rank for rank, count in rank_count.items() if count == 2]
     if len(pair_ranks) >= 2:
         pair_ranks.sort(reverse=True)
-        highest_pair = pair_ranks[0]
-        second_highest_pair = pair_ranks[1]
-        return "Two Pair", highest_pair, second_highest_pair
-    return None
-
-def one_pair(rank_count):
-    for rank in rank_count:
-        if rank_count[rank] == 2:
+        return "Two Pair", pair_ranks[0], pair_ranks[1]
+#ONE PAIR
+    for rank, count in rank_count.items():
+        if count == 2:
             return "One Pair", rank
-    return None
-
-def high_card(cards):
-    highest_card = max(cards, key=card_rank)  
+#HIGH CARD
+    highest_card = max(cards, key=card_rank)
     return "High Card", highest_card
 
-def evaluate_hand(cards):
-    rank_count = Counter(card[0] for card in cards)
-    suit_count = Counter(card[1] for card in cards)
+def process_input():
+    full_hand = board_cards_tuples + user_cards_tuples
+    hand_ranking = evaluate_hand(full_hand)
+    print(f"Hand ranking: {hand_ranking[0]}")
+    print("Cards in the hand:", hand_ranking[2])
 
-    result = straight_flush(cards, suit_count)
-    if result:
-        return result
-
-    result = four_of_a_kind(rank_count)
-    if result:
-        return result
-
-    result = full_house(rank_count)
-    if result:
-        return result
-
-    result = flush(cards, suit_count)
-    if result:
-        return result
-
-    result = is_straight(cards)
-    if result:
-        return result
-
-    result = three_of_a_kind(rank_count)
-    if result:
-        return result
-
-    result = two_pair(rank_count)
-    if result:
-        return result
-
-    result = one_pair(rank_count)
-    if result:
-        return result
-
-    return high_card(cards)
+process_input()
