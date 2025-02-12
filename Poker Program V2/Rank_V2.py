@@ -159,6 +159,9 @@ def process_input():
     full_hand = board_cards_tuples + user_cards_tuples
     hand_ranking = evaluate_hand(full_hand)
     print(f"Hand ranking: {hand_ranking[0]}")
-    print("Cards in the hand:", hand_ranking[2])
+    
+    if len(hand_ranking) > 2:
+        print("Cards in the hand:", hand_ranking[2])
+
 
 process_input()
