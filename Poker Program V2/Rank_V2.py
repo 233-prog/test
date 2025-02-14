@@ -79,6 +79,38 @@ def sort_cards(cards):
                 cards[j] = cards[j + 1]      
                 cards[j + 1] = x       
 
+def find_straight(cards, ranks_order):
+    ranks = [] 
+    
+    for card in cards:
+        rank = card[0]  
+        if rank not in ranks:
+            ranks.append(rank)
+
+    rank_values = []  
+    for rank in ranks:
+        numeric_value = ranks_order[rank]  
+        rank_values.append(numeric_value)
+
+    n = len(rank_values)
+    for i in range(n - 1):
+        for j in range(n - 1 - i):
+            if rank_values[j] < rank_values[j + 1]:
+                temp = rank_values[j]
+                rank_values[j] = rank_values[j + 1]
+                rank_values[j + 1] = temp
+
+    for i in range(len(rank_values) - 4):
+        consecutive_count = 1
+        for j in range(i, i + 4):
+            if rank_values[j] - rank_values[j + 1] == 1:
+                consecutive_count = consecutive_count + 1
+            else:
+                break  
+
+        if consecutive_count == 5:
+            return rank_values
+
 def evaluate_hand(cards):
     rank_count = {}
     suit_count = {}
@@ -102,26 +134,10 @@ def evaluate_hand(cards):
                 if c[1] == suit:
                     suited_cards.append(c)
             sort_cards(suited_cards)
-            
-            for i in range(len(suited_cards) - 4):
-                first_card = suited_cards[i]
-                potential_run = [first_card]
-                first_card_rank = first_card[0]
-                start_rank_value = ranks_order[first_card_rank]
-                
-                for j in range(i + 1, len(suited_cards)):
-                    current_card = suited_cards[j]
-                    current_card_rank = current_card[0]
-                    current_card_value = ranks_order[current_card_rank]
-                    current_run_length = len(potential_run)
-                    needed_rank = start_rank_value - current_run_length
-                    
-                    if current_card_value == needed_rank:
-                        potential_run.append(current_card)
-                        
-                        if len(potential_run) == 5:
-                            return ("Straight Flush", potential_run)
 
+            straight_flush_result = find_straight(cards,ranks_order)
+            if straight_flush_result is not None:
+                return ("Straight Flush", straight_flush_result)
 
     # QUADS 
     for rank, count in rank_count.items():
@@ -149,6 +165,123 @@ def evaluate_hand(cards):
             return ("Four of a Kind", best_five)
 
     # FULL HOUSE 
+        three_list = []
+    pair_list = []
+
+    rank_index = 0
+    rank_keys = []
+
+    while rank_index < len(rank_count):
+        rank_keys.append(list(rank_count)[rank_index])
+        rank_index = rank_index + 1
+
+    rank_index = 0
+
+    while rank_index < len(rank_keys):
+        rank = rank_keys[rank_index]
+        count = rank_count[rank]
+        
+        if count == 3:
+            three_list.append(rank)
+        
+        if count == 2:
+            pair_list.append(rank)
+        
+        rank_index = rank_index + 1
+
+    i = 0
+
+    while i < len(three_list) - 1:
+        j = 0
+        
+        while j < len(three_list) - 1 - i:
+            rank1 = three_list[j]
+            rank2 = three_list[j + 1]
+            
+            value1 = ranks_order[rank1]
+            value2 = ranks_order[rank2]
+            
+            if value1 < value2:
+                three_list[j] = rank2
+                three_list[j + 1] = rank1
+            
+            j = j + 1
+        
+        i = i + 1
+
+    i = 0
+
+    while i < len(pair_list) - 1:
+        j = 0
+        
+        while j < len(pair_list) - 1 - i:
+            rank1 = pair_list[j]
+            rank2 = pair_list[j + 1]
+            
+            value1 = ranks_order[rank1]
+            value2 = ranks_order[rank2]
+            
+            if value1 < value2:
+                pair_list[j] = rank2
+                pair_list[j + 1] = rank1
+            
+            j = j + 1
+        
+        i = i + 1
+
+    if len(three_list) >= 2:
+        first_three = three_list[0]
+        second_three = three_list[1]
+        
+        first_three_cards = []
+        second_three_cards = []
+        
+        card_index = 0
+        
+        while card_index < len(cards):
+            card = cards[card_index]
+            card_rank = card[0]
+            
+            if card_rank == first_three and len(first_three_cards) < 3:
+                first_three_cards.append(card)
+            
+            if card_rank == second_three and len(second_three_cards) < 3:
+                second_three_cards.append(card)
+            
+            card_index = card_index + 1
+        
+        top_two = []
+        top_index = 0
+        
+        while top_index < len(second_three_cards) and len(top_two) < 2:
+            top_two.append(second_three_cards[top_index])
+            top_index = top_index + 1
+        
+        return ("Full House", first_three_cards + top_two)
+
+    if len(three_list) == 1 and len(pair_list) >= 1:
+        first_three = three_list[0]
+        first_pair = pair_list[0]
+        
+        best_three = []
+        best_pair = []
+        
+        card_index = 0
+        
+        while card_index < len(cards):
+            card = cards[card_index]
+            card_rank = card[0]
+            
+            if card_rank == first_three and len(best_three) < 3:
+                best_three.append(card)
+            
+            if card_rank == first_pair and len(best_pair) < 2:
+                best_pair.append(card)
+            
+            card_index = card_index + 1
+        
+        return ("Full House", best_three + best_pair)
+
     # FLUSH
     for suit in suit_count:
         if suit_count[suit] >= 5:
@@ -169,41 +302,10 @@ def evaluate_hand(cards):
 
 
     # STRAIGHT
-    copied_cards = []
-    index_copy = 0
-
-    while index_copy < len(cards):
-        copied_cards.append(cards[index_copy])
-        index_copy = index_copy + 1
-
-    sort_cards(copied_cards)
-
-    outer_index = 0
-
-    while outer_index < (len(copied_cards) - 4):
-        first_card = copied_cards[outer_index]
-        potential_run = [first_card]
         
-        rank_char = first_card[0]
-        start_value = ranks_order[rank_char]
-        
-        inner_index = outer_index + 1
-        
-        while inner_index < len(copied_cards):
-            current_card = copied_cards[inner_index]
-            current_card_value = ranks_order[current_card[0]]
-            
-            needed_value = start_value - len(potential_run)
-            
-            if current_card_value == needed_value:
-                potential_run.append(current_card)
-                
-                if len(potential_run) == 5:
-                    return ("Straight", potential_run)
-            
-            inner_index = inner_index + 1
-        outer_index = outer_index + 1
-
+    straight_result = find_straight(cards,ranks_order)
+    if straight_result is not None:
+        return ("Straight", straight_result)
 
     # TRIPS
     three_of_a_kind_found = False
@@ -350,14 +452,13 @@ def evaluate_hand(cards):
 
 
     # HIGH CARD
-    sort_cards(copied_cards)
-
+    sort_cards(cards)
     high_card_hand = []
     index = 0
-
-    while index < 5 and index < len(copied_cards):
-        high_card_hand.append(copied_cards[index])
+    while index < 5 and index < len(cards):
+        high_card_hand.append(cards[index])
         index = index + 1
+
     return ("High Card", high_card_hand)
 
 def process_input():
@@ -377,25 +478,15 @@ def process_input():
     hand_ranking = evaluate_hand(full_hand)
 
     hand_type = hand_ranking[0]
-    print("Hand ranking:", hand_type)
+
+    hand_ranking_map = {"Straight Flush": 1,"Four of a Kind": 2,"Full House": 3,"Flush": 4,"Straight": 5,"Three of a Kind": 6,"Two Pair": 7,"One Pair": 8, "High Card": 9}
+
+    print((hand_type, hand_ranking_map[hand_type]))
 
     if len(hand_ranking) > 1:
         best_cards = hand_ranking[1]
-        
+
         if isinstance(best_cards, list):
-            best_str = ""
-            index = 0
-            
-            while index < len(best_cards):
-                rank = best_cards[index][0]
-                suit = best_cards[index][1]
-                best_str = best_str + rank + suit
-                
-                if index < len(best_cards) - 1:
-                    best_str = best_str + "-"
-                
-                index = index + 1
-            
-            print(best_str)
+            print(tuple(best_cards))  
 
 process_input()
