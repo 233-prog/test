@@ -76,37 +76,42 @@ def sort_cards(cards):
                 cards[j + 1] = x       
 
 def find_straight(cards, ranks_order):
-    ranks = [] 
-    
+    unique_cards = {}
     for card in cards:
-        rank = card[0]  
-        if rank not in ranks:
-            ranks.append(rank)
+        rank, suit = card[0], card[1]
+        if rank not in unique_cards:
+            unique_cards[rank] = (rank, suit)
+    unique_cards = list(unique_cards.values())
 
-    rank_values = []  
-    for rank in ranks:
-        numeric_value = ranks_order[rank]  
-        rank_values.append(numeric_value)
-
-    n = len(rank_values)
-    for i in range(n - 1):
-        for j in range(n - 1 - i):
-            if rank_values[j] < rank_values[j + 1]:
-                temp = rank_values[j]
-                rank_values[j] = rank_values[j + 1]
-                rank_values[j + 1] = temp
-
-    if len(rank_values) > 4:
-        for i in range(len(rank_values) - 4):
-            consecutive_count = 1
-            for j in range(i, i + 4):
-                if rank_values[j] - rank_values[j + 1] == 1:
-                    consecutive_count = consecutive_count + 1
-                else:
-                    break  
-
-        if consecutive_count == 5:
-            return ranks[i:i+5]
+    candidates = []
+    for rank, suit in unique_cards:
+        value = ranks_order[rank]
+        candidates.append((value, rank, suit))
+        if rank == 'A':
+            candidates.append((1, rank, suit))
+    
+    def candidate_value(candidate):
+        return candidate[0]
+    
+    candidates.sort(key=candidate_value, reverse=True)
+    
+    n = len(candidates)
+    for i in range(n):
+        chain = [candidates[i]]
+        used_ranks = {candidates[i][1]}  
+        current_value = candidates[i][0]
+        
+       
+        for j in range(i + 1, n):
+            if candidates[j][1] in used_ranks:
+                continue
+            if candidates[j][0] == current_value - 1:
+                chain.append(candidates[j])
+                used_ranks.add(candidates[j][1])
+                current_value = candidates[j][0]
+                if len(chain) == 5:
+                    return [(rank, suit) for (val, rank, suit) in chain]
+    return None
 
 def evaluate_hand(cards):
     rank_count = {}
@@ -114,27 +119,19 @@ def evaluate_hand(cards):
 
     for card in cards:
         rank, suit = card
-        
-        if rank not in rank_count:
-            rank_count[rank] = 0
-        rank_count[rank] = rank_count[rank] + 1
-        
-        if suit not in suit_count:
-            suit_count[suit] = 0
-        suit_count[suit] = suit_count[suit] + 1
+        current_rank = rank_count.get(rank, 0)
+        rank_count[rank] = current_rank + 1
+        current_suit = suit_count.get(suit, 0)
+        suit_count[suit] = current_suit + 1
 
-    # STRAIGHT FLUSH
+    # STRAIGHT FLUSH 
     for suit in suit_count:
         if suit_count[suit] >= 5:
-            suited_cards = []
-            for c in cards:
-                if c[1] == suit:
-                    suited_cards.append(c)
-
-            straight_flush_result = find_straight(cards,ranks_order)
+            suited_cards = [c for c in cards if c[1] == suit]
+            straight_flush_result = find_straight(suited_cards, ranks_order)
             if straight_flush_result is not None:
                 return ("Straight Flush", straight_flush_result)
-
+    
     # QUADS 
     for rank, count in rank_count.items():
         if count == 4:
@@ -455,10 +452,13 @@ def evaluate_hand(cards):
 
     return ("High Card", high_card_hand)
 
-
 import test_cases_ranking
 
+failed_tests = []
+total_tests = 0
+
 for test_case, data in test_cases_ranking.test_cases.items():
+    total_tests = total_tests + 1
     print(f"Test Case: {test_case}")
     print(data)
     user_cards_tuples = data['user_cards']
@@ -473,5 +473,32 @@ for test_case, data in test_cases_ranking.test_cases.items():
     else:
         print("Test Failed")
         print(f"Expected: {data['expected_output_rank']}; Actual: {ranking_type}")
+        failed_tests.append(test_case)
+    print()  
+
+print(f"Total tests run: {total_tests}")
+print(f"Number of tests failed: {len(failed_tests)}")
+if failed_tests:
+    print("Failed Test Cases: " + ", ".join(failed_tests))
 
 exit()
+
+#    def process_input():
+#        full_hand = []
+#        
+#    full_hand = user_cards_tuples + board_cards_tuples
+#    hand_ranking = evaluate_hand(full_hand)
+#    hand_type = hand_ranking[0]
+# 
+#    hand_ranking_map = {"Straight Flush": 1,"Four of a Kind": 2,"Full House": 3,"Flush": 4,"Straight": 5,"Three of a Kind": 6,"Two Pair": 7,"One Pair": 8, "High Card": 9}
+# 
+#    print((hand_type, hand_ranking_map[hand_type]))
+# 
+#    if len(hand_ranking) > 1:
+#        best_cards = hand_ranking[1]
+# 
+#        if isinstance(best_cards, list):
+#            print(tuple(best_cards))  
+# 
+#    process_input()
+
