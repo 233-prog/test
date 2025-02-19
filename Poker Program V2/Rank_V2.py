@@ -62,10 +62,6 @@ def user_input():
             board_cards_tuples.append((rank, suit))
         return user_cards_tuples, board_cards_tuples     
 
-user_cards_tuples, board_cards_tuples = user_input()
-print(f"User cards as tuples: {user_cards_tuples}")
-print(f"Board cards as tuples: {board_cards_tuples}")
-
 ranks_order = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,'8': 8, '9': 9, 'T': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14}
 
 def sort_cards(cards):
@@ -100,16 +96,17 @@ def find_straight(cards, ranks_order):
                 rank_values[j] = rank_values[j + 1]
                 rank_values[j + 1] = temp
 
-    for i in range(len(rank_values) - 4):
-        consecutive_count = 1
-        for j in range(i, i + 4):
-            if rank_values[j] - rank_values[j + 1] == 1:
-                consecutive_count = consecutive_count + 1
-            else:
-                break  
+    if len(rank_values) > 4:
+        for i in range(len(rank_values) - 4):
+            consecutive_count = 1
+            for j in range(i, i + 4):
+                if rank_values[j] - rank_values[j + 1] == 1:
+                    consecutive_count = consecutive_count + 1
+                else:
+                    break  
 
         if consecutive_count == 5:
-            return rank_values
+            return ranks[i:i+5]
 
 def evaluate_hand(cards):
     rank_count = {}
@@ -133,7 +130,6 @@ def evaluate_hand(cards):
             for c in cards:
                 if c[1] == suit:
                     suited_cards.append(c)
-            sort_cards(suited_cards)
 
             straight_flush_result = find_straight(cards,ranks_order)
             if straight_flush_result is not None:
@@ -165,7 +161,7 @@ def evaluate_hand(cards):
             return ("Four of a Kind", best_five)
 
     # FULL HOUSE 
-        three_list = []
+    three_list = []
     pair_list = []
 
     rank_index = 0
@@ -308,13 +304,11 @@ def evaluate_hand(cards):
         return ("Straight", straight_result)
 
     # TRIPS
-    three_of_a_kind_found = False
     three_cards = []
     kickers = []
 
     for rank, count in rank_count.items():
         if count == 3:
-            three_of_a_kind_found = True
             
             card_index = 0
             
@@ -461,32 +455,23 @@ def evaluate_hand(cards):
 
     return ("High Card", high_card_hand)
 
-def process_input():
-    full_hand = []
-    index = 0
 
-    while index < len(user_cards_tuples):
-        full_hand.append(user_cards_tuples[index])
-        index = index + 1
+import test_cases_ranking
 
-    index = 0
-
-    while index < len(board_cards_tuples):
-        full_hand.append(board_cards_tuples[index])
-        index = index + 1
-
+for test_case, data in test_cases_ranking.test_cases.items():
+    print(f"Test Case: {test_case}")
+    print(data)
+    user_cards_tuples = data['user_cards']
+    board_cards_tuples = data['community_cards']
+    full_hand = user_cards_tuples + board_cards_tuples
     hand_ranking = evaluate_hand(full_hand)
+    ranking_type = hand_ranking[0]
+    best_cards = hand_ranking[1]
 
-    hand_type = hand_ranking[0]
+    if ranking_type == data['expected_output_rank']:
+        print("Test Passed")
+    else:
+        print("Test Failed")
+        print(f"Expected: {data['expected_output_rank']}; Actual: {ranking_type}")
 
-    hand_ranking_map = {"Straight Flush": 1,"Four of a Kind": 2,"Full House": 3,"Flush": 4,"Straight": 5,"Three of a Kind": 6,"Two Pair": 7,"One Pair": 8, "High Card": 9}
-
-    print((hand_type, hand_ranking_map[hand_type]))
-
-    if len(hand_ranking) > 1:
-        best_cards = hand_ranking[1]
-
-        if isinstance(best_cards, list):
-            print(tuple(best_cards))  
-
-process_input()
+exit()
