@@ -277,95 +277,95 @@ test_cases = {
         'best_five_cards': 'QH QD JH JD 9S'
     },
     
-    # Category 4: Three-of-a-kind (15 test cases)
+    # Category 4: Three of a Kind (15 test cases)
     "test_case_46": {
         'user_cards': [('A','H'), ('A','D')],
         'community_cards': [('A','S'), ('K','H'), ('Q','D'), ('3','C'), ('5','S')],
-        'expected_output_rank': 'Three-of-a-kind',
+        'expected_output_rank': 'Three of a Kind',
         'best_five_cards': 'AH AD AS KH QD'
     },
     "test_case_47": {
         'user_cards': [('K','H'), ('K','D')],
         'community_cards': [('K','S'), ('A','C'), ('9','H'), ('4','D'), ('2','S')],
-        'expected_output_rank': 'Three-of-a-kind',
+        'expected_output_rank': 'Three of a Kind',
         'best_five_cards': 'KH KD KS AC 9H'
     },
     "test_case_48": {
         'user_cards': [('Q','S'), ('Q','C')],
         'community_cards': [('Q','H'), ('J','D'), ('8','S'), ('5','H'), ('3','C')],
-        'expected_output_rank': 'Three-of-a-kind',
+        'expected_output_rank': 'Three of a Kind',
         'best_five_cards': 'QS QC QH JD 8S'
     },
     "test_case_49": {
         'user_cards': [('J','H'), ('J','D')],
         'community_cards': [('J','S'), ('T','C'), ('9','D'), ('7','S'), ('2','H')],
-        'expected_output_rank': 'Three-of-a-kind',
+        'expected_output_rank': 'Three of a Kind',
         'best_five_cards': 'JH JD JS TC 9D'
     },
     "test_case_50": {
         'user_cards': [('T','H'), ('T','D')],
         'community_cards': [('T','S'), ('K','C'), ('8','H'), ('4','S'), ('3','D')],
-        'expected_output_rank': 'Three-of-a-kind',
+        'expected_output_rank': 'Three of a Kind',
         'best_five_cards': 'TH TD TS KC 8H'
     },
     "test_case_51": {
         'user_cards': [('9','H'), ('9','D')],
         'community_cards': [('9','S'), ('A','H'), ('7','C'), ('5','D'), ('3','S')],
-        'expected_output_rank': 'Three-of-a-kind',
+        'expected_output_rank': 'Three of a Kind',
         'best_five_cards': '9H 9D 9S AH 7C'
     },
     "test_case_52": {
         'user_cards': [('8','H'), ('8','D')],
         'community_cards': [('8','S'), ('K','H'), ('Q','C'), ('6','S'), ('3','D')],
-        'expected_output_rank': 'Three-of-a-kind',
+        'expected_output_rank': 'Three of a Kind',
         'best_five_cards': '8H 8D 8S KH QC'
     },
     "test_case_53": {
         'user_cards': [('7','H'), ('7','D')],
         'community_cards': [('7','S'), ('J','C'), ('9','H'), ('4','D'), ('2','S')],
-        'expected_output_rank': 'Three-of-a-kind',
+        'expected_output_rank': 'Three of a Kind',
         'best_five_cards': '7H 7D 7S JC 9H'
     },
     "test_case_54": {
         'user_cards': [('6','H'), ('6','D')],
         'community_cards': [('6','S'), ('T','C'), ('8','D'), ('5','H'), ('3','S')],
-        'expected_output_rank': 'Three-of-a-kind',
+        'expected_output_rank': 'Three of a Kind',
         'best_five_cards': '6H 6D 6S TC 8D'
     },
     "test_case_55": {
         'user_cards': [('5','H'), ('5','D')],
         'community_cards': [('5','S'), ('K','D'), ('9','C'), ('7','H'), ('4','S')],
-        'expected_output_rank': 'Three-of-a-kind',
+        'expected_output_rank': 'Three of a Kind',
         'best_five_cards': '5H 5D 5S KD 9C'
     },
     "test_case_56": {
         'user_cards': [('4','H'), ('4','D')],
         'community_cards': [('4','S'), ('A','C'), ('8','H'), ('7','D'), ('3','S')],
-        'expected_output_rank': 'Three-of-a-kind',
+        'expected_output_rank': 'Three of a Kind',
         'best_five_cards': '4H 4D 4S AC 8H'
     },
     "test_case_57": {
         'user_cards': [('3','H'), ('3','D')],
         'community_cards': [('3','S'), ('Q','C'), ('T','H'), ('9','D'), ('2','S')],
-        'expected_output_rank': 'Three-of-a-kind',
+        'expected_output_rank': 'Three of a Kind',
         'best_five_cards': '3H 3D 3S QC TH'
     },
     "test_case_58": {
         'user_cards': [('2','H'), ('2','D')],
         'community_cards': [('2','S'), ('K','C'), ('J','H'), ('8','D'), ('5','S')],
-        'expected_output_rank': 'Three-of-a-kind',
+        'expected_output_rank': 'Three of a Kind',
         'best_five_cards': '2H 2D 2S KC JH'
     },
     "test_case_59": {
         'user_cards': [('A','C'), ('A','D')],
         'community_cards': [('A','S'), ('Q','H'), ('8','C'), ('4','S'), ('3','D')],
-        'expected_output_rank': 'Three-of-a-kind',
+        'expected_output_rank': 'Three of a Kind',
         'best_five_cards': 'AC AD AS QH 8C'
     },
     "test_case_60": {
         'user_cards': [('K','C'), ('K','D')],
         'community_cards': [('K','S'), ('J','H'), ('7','C'), ('5','D'), ('2','S')],
-        'expected_output_rank': 'Three-of-a-kind',
+        'expected_output_rank': 'Three of a Kind',
         'best_five_cards': 'KC KD KS JH 7C'
     },
     
@@ -615,189 +615,188 @@ test_cases = {
         'best_five_cards': 'KH KS KD 4C 4D'
     },
     
-    # Category 8: Four-of-a-kind (15 test cases)
+    # Category 8: Four of a Kind (15 test cases)
     "test_case_106": {
         'user_cards': [('A','H'), ('A','D')],
         'community_cards': [('A','S'), ('A','C'), ('K','H'), ('3','D'), ('5','C')],
-        'expected_output_rank': 'Four-of-a-kind',
+        'expected_output_rank': 'Four of a Kind',
         'best_five_cards': 'AH AD AS AC KH'
     },
     "test_case_107": {
         'user_cards': [('K','H'), ('K','D')],
         'community_cards': [('K','S'), ('K','C'), ('Q','H'), ('7','D'), ('2','C')],
-        'expected_output_rank': 'Four-of-a-kind',
+        'expected_output_rank': 'Four of a Kind',
         'best_five_cards': 'KH KD KS KC QH'
     },
     "test_case_108": {
         'user_cards': [('Q','S'), ('Q','C')],
         'community_cards': [('Q','H'), ('Q','D'), ('A','S'), ('4','H'), ('9','D')],
-        'expected_output_rank': 'Four-of-a-kind',
+        'expected_output_rank': 'Four of a Kind',
         'best_five_cards': 'QS QC QH QD AS'
     },
     "test_case_109": {
         'user_cards': [('J','H'), ('J','D')],
         'community_cards': [('J','S'), ('J','C'), ('T','S'), ('8','D'), ('3','C')],
-        'expected_output_rank': 'Four-of-a-kind',
+        'expected_output_rank': 'Four of a Kind',
         'best_five_cards': 'JH JD JS JC TS'
     },
     "test_case_110": {
         'user_cards': [('T','H'), ('T','D')],
         'community_cards': [('T','S'), ('T','C'), ('K','D'), ('5','H'), ('2','S')],
-        'expected_output_rank': 'Four-of-a-kind',
+        'expected_output_rank': 'Four of a Kind',
         'best_five_cards': 'TH TD TS TC KD'
     },
     "test_case_111": {
         'user_cards': [('9','H'), ('9','D')],
         'community_cards': [('9','S'), ('9','C'), ('A','H'), ('7','S'), ('3','D')],
-        'expected_output_rank': 'Four-of-a-kind',
+        'expected_output_rank': 'Four of a Kind',
         'best_five_cards': '9H 9D 9S 9C AH'
     },
     "test_case_112": {
         'user_cards': [('8','H'), ('8','D')],
         'community_cards': [('8','S'), ('8','C'), ('K','S'), ('Q','D'), ('5','C')],
-        'expected_output_rank': 'Four-of-a-kind',
+        'expected_output_rank': 'Four of a Kind',
         'best_five_cards': '8H 8D 8S 8C KS'
     },
     "test_case_113": {
         'user_cards': [('7','S'), ('7','C')],
         'community_cards': [('7','H'), ('7','D'), ('Q','S'), ('J','H'), ('4','C')],
-        'expected_output_rank': 'Four-of-a-kind',
+        'expected_output_rank': 'Four of a Kind',
         'best_five_cards': '7S 7C 7H 7D QS'
     },
     "test_case_114": {
         'user_cards': [('6','H'), ('6','D')],
         'community_cards': [('6','S'), ('6','C'), ('T','D'), ('9','S'), ('2','H')],
-        'expected_output_rank': 'Four-of-a-kind',
+        'expected_output_rank': 'Four of a Kind',
         'best_five_cards': '6H 6D 6S 6C TD'
     },
     "test_case_115": {
         'user_cards': [('5','S'), ('5','C')],
         'community_cards': [('5','H'), ('5','D'), ('K','H'), ('8','S'), ('3','C')],
-        'expected_output_rank': 'Four-of-a-kind',
+        'expected_output_rank': 'Four of a Kind',
         'best_five_cards': '5S 5C 5H 5D KH'
     },
     "test_case_116": {
         'user_cards': [('4','H'), ('4','D')],
         'community_cards': [('4','S'), ('4','C'), ('A','D'), ('7','H'), ('9','C')],
-        'expected_output_rank': 'Four-of-a-kind',
+        'expected_output_rank': 'Four of a Kind',
         'best_five_cards': '4H 4D 4S 4C AD'
     },
     "test_case_117": {
         'user_cards': [('3','H'), ('3','D')],
         'community_cards': [('3','S'), ('3','C'), ('Q','H'), ('8','D'), ('T','S')],
-        'expected_output_rank': 'Four-of-a-kind',
+        'expected_output_rank': 'Four of a Kind',
         'best_five_cards': '3H 3D 3S 3C QH'
     },
     "test_case_118": {
         'user_cards': [('2','H'), ('2','D')],
         'community_cards': [('2','S'), ('2','C'), ('K','C'), ('J','D'), ('9','H')],
-        'expected_output_rank': 'Four-of-a-kind',
+        'expected_output_rank': 'Four of a Kind',
         'best_five_cards': '2H 2D 2S 2C KC'
     },
     "test_case_119": {
         'user_cards': [('A','H'), ('A','S')],
         'community_cards': [('A','D'), ('A','C'), ('3','H'), ('K','D'), ('7','C')],
-        'expected_output_rank': 'Four-of-a-kind',
+        'expected_output_rank': 'Four of a Kind',
         'best_five_cards': 'AH AS AD AC KD'
     },
     "test_case_120": {
         'user_cards': [('9','C'), ('9','D')],
         'community_cards': [('9','H'), ('9','S'), ('4','C'), ('6','H'), ('3','D')],
-        'expected_output_rank': 'Four-of-a-kind',
+        'expected_output_rank': 'Four of a Kind',
         'best_five_cards': '9C 9D 9H 9S 6H'
     },
     
-    # Category 9: Straight flush (15 test cases)
-    "test_case_121": {
-        'user_cards': [('6','H'), ('7','H')],
-        'community_cards': [('4','H'), ('5','H'), ('8','H'), ('2','D'), ('9','C')],
-        'expected_output_rank': 'Straight flush',
-        'best_five_cards': '6H 7H 4H 5H 8H'
-    },
-    "test_case_122": {
-        'user_cards': [('7','S'), ('8','S')],
-        'community_cards': [('5','S'), ('6','S'), ('9','S'), ('3','H'), ('2','D')],
-        'expected_output_rank': 'Straight flush',
-        'best_five_cards': '7S 8S 5S 6S 9S'
-    },
-    "test_case_123": {
-        'user_cards': [('3','C'), ('4','C')],
-        'community_cards': [('2','C'), ('5','C'), ('6','C'), ('9','H'), ('7','D')],
-        'expected_output_rank': 'Straight flush',
-        'best_five_cards': '3C 4C 2C 5C 6C'
-    },
-    "test_case_124": {
-        'user_cards': [('T','D'), ('J','D')],
-        'community_cards': [('7','D'), ('8','D'), ('9','D'), ('4','S'), ('2','C')],
-        'expected_output_rank': 'Straight flush',
-        'best_five_cards': 'TD JD 7D 8D 9D'
-    },
-    "test_case_125": {
-        'user_cards': [('T','H'), ('J','H')],
-        'community_cards': [('9','H'), ('Q','H'), ('K','H'), ('3','D'), ('2','C')],
-        'expected_output_rank': 'Straight flush',
-        'best_five_cards': 'TH JH 9H QH KH'
-    },
-    "test_case_126": {
-        'user_cards': [('4','S'), ('5','S')],
-        'community_cards': [('3','S'), ('6','S'), ('7','S'), ('8','H'), ('2','D')],
-        'expected_output_rank': 'Straight flush',
-        'best_five_cards': '4S 5S 3S 6S 7S'
-    },
-    "test_case_127": {
-        'user_cards': [('8','C'), ('9','C')],
-        'community_cards': [('6','C'), ('7','C'), ('T','C'), ('Q','D'), ('3','H')],
-        'expected_output_rank': 'Straight flush',
-        'best_five_cards': '8C 9C 6C 7C TC'
-    },
-    "test_case_128": {
-        'user_cards': [('5','D'), ('6','D')],
-        'community_cards': [('4','D'), ('7','D'), ('8','D'), ('K','S'), ('3','C')],
-        'expected_output_rank': 'Straight flush',
-        'best_five_cards': '5D 6D 4D 7D 8D'
-    },
-    "test_case_129": {
-        'user_cards': [('9','H'), ('T','H')],
-        'community_cards': [('8','H'), ('J','H'), ('Q','H'), ('2','S'), ('3','D')],
-        'expected_output_rank': 'Straight flush',
-        'best_five_cards': '9H TH 8H JH QH'
-    },
-    "test_case_130": {
-        'user_cards': [('2','S'), ('3','S')],
-        'community_cards': [('4','S'), ('5','S'), ('6','S'), ('7','D'), ('8','C')],
-        'expected_output_rank': 'Straight flush',
-        'best_five_cards': '2S 3S 4S 5S 6S'
-    },
-    "test_case_131": {
-        'user_cards': [('6','C'), ('7','C')],
-        'community_cards': [('5','C'), ('8','C'), ('9','C'), ('T','H'), ('2','D')],
-        'expected_output_rank': 'Straight flush',
-        'best_five_cards': '6C 7C 5C 8C 9C'
-    },
-    "test_case_132": {
-        'user_cards': [('4','D'), ('5','D')],
-        'community_cards': [('3','D'), ('6','D'), ('7','D'), ('K','H'), ('8','S')],
-        'expected_output_rank': 'Straight flush',
-        'best_five_cards': '4D 5D 3D 6D 7D'
-    },
-    "test_case_133": {
-        'user_cards': [('7','H'), ('8','H')],
-        'community_cards': [('6','H'), ('9','H'), ('T','H'), ('2','C'), ('3','D')],
-        'expected_output_rank': 'Straight flush',
-        'best_five_cards': '7H 8H 6H 9H TH'
-    },
-    "test_case_134": {
-        'user_cards': [('9','S'), ('T','S')],
-        'community_cards': [('7','S'), ('8','S'), ('J','S'), ('3','H'), ('4','D')],
-        'expected_output_rank': 'Straight flush',
-        'best_five_cards': '9S TS 7S 8S JS'
-    },
-    "test_case_135": {
-        'user_cards': [('A','C'), ('2','C')],
-        'community_cards': [('3','C'), ('4','C'), ('5','C'), ('8','D'), ('9','H')],
-        'expected_output_rank': 'Straight flush',
-        'best_five_cards': 'AC 2C 3C 4C 5C'
-    }
+        # Category 9: Straight Flush (15 test cases)
+        "test_case_121": {
+            'user_cards': [('6','H'), ('7','H')],
+            'community_cards': [('4','H'), ('5','H'), ('8','H'), ('2','D'), ('9','C')],
+            'expected_output_rank': 'Straight Flush',
+            'best_five_cards': '4H 5H 6H 7H 8H'
+        },
+        "test_case_122": {
+            'user_cards': [('7','S'), ('8','S')],
+            'community_cards': [('5','S'), ('6','S'), ('9','S'), ('3','H'), ('2','D')],
+            'expected_output_rank': 'Straight Flush',
+            'best_five_cards': '5S 6S 7S 8S 9S'
+        },
+        "test_case_123": {
+            'user_cards': [('3','C'), ('4','C')],
+            'community_cards': [('2','C'), ('5','C'), ('6','C'), ('9','H'), ('7','D')],
+            'expected_output_rank': 'Straight Flush',
+            'best_five_cards': '2C 3C 4C 5C 6C'
+        },
+        "test_case_124": {
+            'user_cards': [('T','D'), ('J','D')],
+            'community_cards': [('7','D'), ('8','D'), ('9','D'), ('4','S'), ('2','C')],
+            'expected_output_rank': 'Straight Flush',
+            'best_five_cards': '7D 8D 9D TD JD'
+        },
+        "test_case_125": {
+            'user_cards': [('T','H'), ('J','H')],
+            'community_cards': [('9','H'), ('Q','H'), ('K','H'), ('3','D'), ('2','C')],
+            'expected_output_rank': 'Straight Flush',
+            'best_five_cards': '9H TH JH QH KH'
+        },
+        "test_case_126": {
+            'user_cards': [('4','S'), ('5','S')],
+            'community_cards': [('3','S'), ('6','S'), ('7','S'), ('8','H'), ('2','D')],
+            'expected_output_rank': 'Straight Flush',
+            'best_five_cards': '3S 4S 5S 6S 7S'
+        },
+        "test_case_127": {
+            'user_cards': [('8','C'), ('9','C')],
+            'community_cards': [('6','C'), ('7','C'), ('T','C'), ('Q','D'), ('3','H')],
+            'expected_output_rank': 'Straight Flush',
+            'best_five_cards': '6C 7C 8C 9C TC'
+        },
+        "test_case_128": {
+            'user_cards': [('5','D'), ('6','D')],
+            'community_cards': [('4','D'), ('7','D'), ('8','D'), ('K','S'), ('3','C')],
+            'expected_output_rank': 'Straight Flush',
+            'best_five_cards': '4D 5D 6D 7D 8D'
+        },
+        "test_case_129": {
+            'user_cards': [('9','H'), ('T','H')],
+            'community_cards': [('8','H'), ('J','H'), ('Q','H'), ('2','S'), ('3','D')],
+            'expected_output_rank': 'Straight Flush',
+            'best_five_cards': '8H 9H TH JH QH'
+        },
+        "test_case_130": {
+            'user_cards': [('2','S'), ('3','S')],
+            'community_cards': [('4','S'), ('5','S'), ('6','S'), ('7','D'), ('8','C')],
+            'expected_output_rank': 'Straight Flush',
+            'best_five_cards': '2S 3S 4S 5S 6S'
+        },
+        "test_case_131": {
+            'user_cards': [('6','C'), ('7','C')],
+            'community_cards': [('5','C'), ('8','C'), ('9','C'), ('T','H'), ('2','D')],
+            'expected_output_rank': 'Straight Flush',
+            'best_five_cards': '5C 6C 7C 8C 9C'
+        },
+        "test_case_132": {
+            'user_cards': [('4','D'), ('5','D')],
+            'community_cards': [('3','D'), ('6','D'), ('7','D'), ('K','H'), ('8','S')],
+            'expected_output_rank': 'Straight Flush',
+            'best_five_cards': '3D 4D 5D 6D 7D'
+        },
+        "test_case_133": {
+            'user_cards': [('7','H'), ('8','H')],
+            'community_cards': [('6','H'), ('9','H'), ('T','H'), ('2','C'), ('3','D')],
+            'expected_output_rank': 'Straight Flush',
+            'best_five_cards': '6H 7H 8H 9H TH'
+        },
+        "test_case_134": {
+            'user_cards': [('9','S'), ('T','S')],
+            'community_cards': [('7','S'), ('8','S'), ('J','S'), ('3','H'), ('4','D')],
+            'expected_output_rank': 'Straight Flush',
+            'best_five_cards': '7S 8S 9S TS JS'
+        },
+        "test_case_135": {
+            'user_cards': [('A','C'), ('2','C')],
+            'community_cards': [('3','C'), ('4','C'), ('5','C'), ('8','D'), ('9','H')],
+            'expected_output_rank': 'Straight Flush',
+            'best_five_cards': 'AC 2C 3C 4C 5C'
+        }
 }
-
 print(test_cases)
