@@ -452,29 +452,24 @@ def evaluate_hand(cards):
 
     return ("High Card", high_card_hand)
 
-# --- Option A: Regular User Input Process ---
-def process_input():
+def process_input(): #Option A
     user_cards_tuples, board_cards_tuples = user_input()
     full_hand = user_cards_tuples + board_cards_tuples
     hand_ranking = evaluate_hand(full_hand)
     hand_type = hand_ranking[0]
-    hand_ranking_map = {"Straight Flush": 1, "Four of a Kind": 2, "Full House": 3,
-                        "Flush": 4, "Straight": 5, "Three of a Kind": 6,
-                        "Two Pair": 7, "One Pair": 8, "High Card": 9}
+    hand_ranking_map = {"Straight Flush": 1, "Four of a Kind": 2, "Full House": 3,"Flush": 4, "Straight": 5, "Three of a Kind": 6,"Two Pair": 7, "One Pair": 8, "High Card": 9}
     print(f"Hand Ranking: {hand_type}, Rank Score: {hand_ranking_map[hand_type]}")
     if len(hand_ranking) > 1:
         best_cards = hand_ranking[1]
         if isinstance(best_cards, list):
             print("Best 5 Cards:", tuple(best_cards))
 
-# --- Option B: Input Validation Test Cases ---
-def run_input_validation_tests():
-    # This file (test_Cases_input) should follow the same structure as test_cases_ranking.
+def run_input_validation_tests(): #Option B
     import test_Cases_input
     failed_tests = []
     total_tests = 0
     for test_case, data in test_Cases_input.test_cases.items():
-        total_tests += 1
+        total_tests = total_tests + 1
         print(f"Test Case: {test_case}")
         print("Input Data:", data)
         user_cards_tuples = data['user_cards']
@@ -494,13 +489,12 @@ def run_input_validation_tests():
     if failed_tests:
         print("Failed Test Cases: " + ", ".join(failed_tests))
 
-# --- Option C: Hand Ranking Test Cases ---
-def run_hand_ranking_tests():
+def run_hand_ranking_tests(): #Option C
     import test_cases_ranking
     failed_tests = []
     total_tests = 0
     for test_case, data in test_cases_ranking.test_cases.items():
-        total_tests += 1
+        total_tests = total_tests + 1
         print(f"Test Case: {test_case}")
         print("Input Data:", data)
         user_cards_tuples = data['user_cards']
@@ -520,13 +514,12 @@ def run_hand_ranking_tests():
     if failed_tests:
         print("Failed Test Cases: " + ", ".join(failed_tests))
 
-# --- Main Prompt ---
 def main():
     print("Select an option:")
     print("A: User Cards")
     print("B: Input Validation")
     print("C: Hand Ranking")
-    choice = input("Enter your choice (A/B/C): ").strip().upper()
+    choice = input("Enter your choice: ").strip().upper()
 
     if choice == "A":
         process_input()
@@ -535,7 +528,7 @@ def main():
     elif choice == "C":
         run_hand_ranking_tests()
     else:
-        print("Invalid choice. Exiting.")
+        print("Invalid choice.")
 
 if __name__ == "__main__":
     main()
