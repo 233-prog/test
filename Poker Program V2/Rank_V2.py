@@ -452,53 +452,91 @@ def evaluate_hand(cards):
 
     return ("High Card", high_card_hand)
 
-import test_cases_ranking
-
-failed_tests = []
-total_tests = 0
-
-for test_case, data in test_cases_ranking.test_cases.items():
-    total_tests = total_tests + 1
-    print(f"Test Case: {test_case}")
-    print(data)
-    user_cards_tuples = data['user_cards']
-    board_cards_tuples = data['community_cards']
+# --- Option A: Regular User Input Process ---
+def process_input():
+    user_cards_tuples, board_cards_tuples = user_input()
     full_hand = user_cards_tuples + board_cards_tuples
     hand_ranking = evaluate_hand(full_hand)
-    ranking_type = hand_ranking[0]
-    best_cards = hand_ranking[1]
+    hand_type = hand_ranking[0]
+    hand_ranking_map = {"Straight Flush": 1, "Four of a Kind": 2, "Full House": 3,
+                        "Flush": 4, "Straight": 5, "Three of a Kind": 6,
+                        "Two Pair": 7, "One Pair": 8, "High Card": 9}
+    print(f"Hand Ranking: {hand_type}, Rank Score: {hand_ranking_map[hand_type]}")
+    if len(hand_ranking) > 1:
+        best_cards = hand_ranking[1]
+        if isinstance(best_cards, list):
+            print("Best 5 Cards:", tuple(best_cards))
 
-    if ranking_type == data['expected_output_rank']:
-        print("Test Passed")
+# --- Option B: Input Validation Test Cases ---
+def run_input_validation_tests():
+    # This file (test_Cases_input) should follow the same structure as test_cases_ranking.
+    import test_Cases_input
+    failed_tests = []
+    total_tests = 0
+    for test_case, data in test_Cases_input.test_cases.items():
+        total_tests += 1
+        print(f"Test Case: {test_case}")
+        print("Input Data:", data)
+        user_cards_tuples = data['user_cards']
+        board_cards_tuples = data['community_cards']
+        full_hand = user_cards_tuples + board_cards_tuples
+        hand_ranking = evaluate_hand(full_hand)
+        ranking_type = hand_ranking[0]
+        if ranking_type == data['expected_output']:
+            print("Test Passed")
+        else:
+            print("Test Failed")
+            print(f"Expected: {data['expected_output']}; Actual: {ranking_type}")
+            failed_tests.append(test_case)
+        print()
+    print(f"Total tests run: {total_tests}")
+    print(f"Number of tests failed: {len(failed_tests)}")
+    if failed_tests:
+        print("Failed Test Cases: " + ", ".join(failed_tests))
+
+# --- Option C: Hand Ranking Test Cases ---
+def run_hand_ranking_tests():
+    import test_cases_ranking
+    failed_tests = []
+    total_tests = 0
+    for test_case, data in test_cases_ranking.test_cases.items():
+        total_tests += 1
+        print(f"Test Case: {test_case}")
+        print("Input Data:", data)
+        user_cards_tuples = data['user_cards']
+        board_cards_tuples = data['community_cards']
+        full_hand = user_cards_tuples + board_cards_tuples
+        hand_ranking = evaluate_hand(full_hand)
+        ranking_type = hand_ranking[0]
+        if ranking_type == data['expected_output_rank']:
+            print("Test Passed")
+        else:
+            print("Test Failed")
+            print(f"Expected: {data['expected_output_rank']}; Actual: {ranking_type}")
+            failed_tests.append(test_case)
+        print()
+    print(f"Total tests run: {total_tests}")
+    print(f"Number of tests failed: {len(failed_tests)}")
+    if failed_tests:
+        print("Failed Test Cases: " + ", ".join(failed_tests))
+
+# --- Main Prompt ---
+def main():
+    print("Select an option:")
+    print("A: User Cards")
+    print("B: Input Validation")
+    print("C: Hand Ranking")
+    choice = input("Enter your choice (A/B/C): ").strip().upper()
+
+    if choice == "A":
+        process_input()
+    elif choice == "B":
+        run_input_validation_tests()
+    elif choice == "C":
+        run_hand_ranking_tests()
     else:
-        print("Test Failed")
-        print(f"Expected: {data['expected_output_rank']}; Actual: {ranking_type}")
-        failed_tests.append(test_case)
-    print()  
+        print("Invalid choice. Exiting.")
 
-print(f"Total tests run: {total_tests}")
-print(f"Number of tests failed: {len(failed_tests)}")
-if failed_tests:
-    print("Failed Test Cases: " + ", ".join(failed_tests))
-
-exit()
-
-#    def process_input():
-#        full_hand = []
-#        
-#    full_hand = user_cards_tuples + board_cards_tuples
-#    hand_ranking = evaluate_hand(full_hand)
-#    hand_type = hand_ranking[0]
-# 
-#    hand_ranking_map = {"Straight Flush": 1,"Four of a Kind": 2,"Full House": 3,"Flush": 4,"Straight": 5,"Three of a Kind": 6,"Two Pair": 7,"One Pair": 8, "High Card": 9}
-# 
-#    print((hand_type, hand_ranking_map[hand_type]))
-# 
-#    if len(hand_ranking) > 1:
-#        best_cards = hand_ranking[1]
-# 
-#        if isinstance(best_cards, list):
-#            print(tuple(best_cards))  
-# 
-#    process_input()
+if __name__ == "__main__":
+    main()
 
