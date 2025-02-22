@@ -75,42 +75,45 @@ def sort_cards(cards):
                 cards[j] = cards[j + 1]      
                 cards[j + 1] = x       
 
-def find_straight(cards, ranks_order):
-    unique_cards = {}
-    for card in cards:
-        rank, suit = card[0], card[1]
-        if rank not in unique_cards:
-            unique_cards[rank] = (rank, suit)
-    unique_cards = list(unique_cards.values())
+def find_straight(cards, rank_val):
+    unique_cards = []
+    seen_ranks = set()
 
-    candidates = []
-    for rank, suit in unique_cards:
-        value = ranks_order[rank]
-        candidates.append((value, rank, suit))
+    for card in cards:
+        rank, suit = card
+        if rank not in seen_ranks:
+            unique_cards.append(card)
+            seen_ranks.add(rank)
+
+    rank_numbers = []
+    for card in unique_cards:
+        rank, suit = card
+        rank_numbers.append((rank_val[rank], rank, suit))
         if rank == 'A':
-            candidates.append((1, rank, suit))
-    
-    def candidate_value(candidate):
-        return candidate[0]
-    
-    candidates.sort(key=candidate_value, reverse=True)
-    
-    n = len(candidates)
-    for i in range(n):
-        chain = [candidates[i]]
-        used_ranks = {candidates[i][1]}  
-        current_value = candidates[i][0]
-        
-       
-        for j in range(i + 1, n):
-            if candidates[j][1] in used_ranks:
+            rank_numbers.append((1, rank, suit))
+
+    def get_rank_value(card_tuple):
+        return card_tuple[0]
+
+    rank_numbers.sort(key=get_rank_value, reverse=True)
+
+    for i in range(len(rank_numbers)):
+        current_chain = [rank_numbers[i]]
+        current_ranks = [rank_numbers[i][1]]
+        current_value = rank_numbers[i][0]
+
+        for j in range(i + 1, len(rank_numbers)):
+            if rank_numbers[j][1] in current_ranks:
                 continue
-            if candidates[j][0] == current_value - 1:
-                chain.append(candidates[j])
-                used_ranks.add(candidates[j][1])
-                current_value = candidates[j][0]
-                if len(chain) == 5:
-                    return [(rank, suit) for (val, rank, suit) in chain]
+            
+            if rank_numbers[j][0] == current_value - 1:
+                current_chain.append(rank_numbers[j])
+                current_ranks.append(rank_numbers[j][1])
+                current_value = rank_numbers[j][0]
+
+                if len(current_chain) == 5:
+                    return [(r, s) for (n, r, s) in current_chain]
+
     return None
 
 def evaluate_hand(cards):
@@ -464,7 +467,7 @@ def process_input(): #Option A
         if isinstance(best_cards, list):
             print("Best 5 Cards:", tuple(best_cards))
 
-def run_input_validation_tests(): #Option B
+def run_hand_input_tests(): #Option B
     import test_Cases_input
     failed_tests = []
     total_tests = 0
@@ -474,14 +477,12 @@ def run_input_validation_tests(): #Option B
         print("Input Data:", data)
         user_cards_tuples = data['user_cards']
         board_cards_tuples = data['community_cards']
-        full_hand = user_cards_tuples + board_cards_tuples
-        hand_ranking = evaluate_hand(full_hand)
-        ranking_type = hand_ranking[0]
-        if ranking_type == data['expected_output']:
+        if user_cards_tuples == data['expected_user_cards'] and board_cards_tuples == data['expected_board_cards']:
             print("Test Passed")
         else:
             print("Test Failed")
-            print(f"Expected: {data['expected_output']}; Actual: {ranking_type}")
+            print(f"Expected User Cards: {data['expected_user_cards']}; Actual: {user_cards_tuples}")
+            print(f"Expected Board Cards: {data['expected_board_cards']}; Actual: {board_cards_tuples}")
             failed_tests.append(test_case)
         print()
     print(f"Total tests run: {total_tests}")
@@ -524,7 +525,7 @@ def main():
     if choice == "A":
         process_input()
     elif choice == "B":
-        run_input_validation_tests()
+        run_hand_input_tests()
     elif choice == "C":
         run_hand_ranking_tests()
     else:
@@ -533,3 +534,38 @@ def main():
 if __name__ == "__main__":
     main()
 
+def calculate_outs_two_missing_cards(full_hand, ranks_order, hand_ranking_map):
+    current_eval = evaluate_hand(full_hand, ranks_order)
+    current_ranking = current_eval[0]
+    current_value = hand_ranking_map[current_ranking]
+
+    deck = []
+    for rank in ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"]:
+        for suit in ["C", "D", "H", "S"]:
+            deck.append((rank, suit))
+
+    unseen_cards = []
+    for card in deck:
+        if card not in full_hand:
+            unseen_cards.append(card)
+
+    outs = {}
+
+    for turn_card in unseen_cards:
+        remaining_cards = [card for card in unseen_cards if card != turn_card]
+        for river_card in remaining_cards:
+            new_hand = full_hand + [turn_card] + [river_card]
+            new_eval = evaluate_hand(new_hand, ranks_order) 
+            new_ranking = new_eval[0]
+            new_value = hand_ranking_map[new_ranking]
+            if new_value < current_value:
+                if new_ranking not in outs:
+                    outs[new_ranking] = []
+                outs[new_ranking].append((turn_card, river_card))
+    
+    n = len(unseen_cards)
+    total_combinations = n * (n - 1) // 2  
+    total_outs = sum(len(v) for v in outs.values())
+    probability = total_outs / total_combinations
+    print("Outs:", outs, "\nProbability:", probability)
+    return outs, probability
