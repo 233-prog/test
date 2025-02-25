@@ -455,6 +455,50 @@ def evaluate_hand(cards):
 
     return ("High Card", high_card_hand)
 
+def calculate_outs_two_missing_cards(full_hand, ranks_order, hand_ranking_map):
+    current_eval = evaluate_hand(full_hand)
+    current_ranking = current_eval[0]
+    current_value = hand_ranking_map[current_ranking]
+
+    deck = []
+    for rank in ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"]:
+        for suit in ["C", "D", "H", "S"]:
+            deck.append((rank, suit))
+
+    unseen_cards = []
+    for card in deck:
+        if card not in full_hand:
+            unseen_cards.append(card)
+
+    outs = {}
+
+    for turn_card in unseen_cards:
+        remaining_cards = []
+        for card in unseen_cards:
+            if card != turn_card:
+                remaining_cards.append(card)
+        for river_card in remaining_cards:
+            new_hand = full_hand + [turn_card] + [river_card]
+            new_eval = evaluate_hand(new_hand)
+            new_ranking = new_eval[0]
+            new_value = hand_ranking_map[new_ranking]
+            if new_value < current_value:
+                if new_ranking not in outs:
+                    outs[new_ranking] = []
+                outs[new_ranking].append((turn_card, river_card))
+    
+    n = len(unseen_cards)
+    total_combinations = n * (n - 1) // 2  
+    overall_outs = sum(len(v) for v in outs.values())
+    overall_probability = (overall_outs / total_combinations) * 100
+
+    print("Overall Improvement Probability: {:.2f}%".format(overall_probability))
+    for rank in outs:
+        rank_probability = (len(outs[rank]) / total_combinations) * 100
+        print(f"{rank}: {rank_probability:.2f}%")
+    
+    return outs, overall_probability
+
 def process_input(): #Option A
     user_cards_tuples, board_cards_tuples = user_input()
     full_hand = user_cards_tuples + board_cards_tuples
@@ -466,25 +510,49 @@ def process_input(): #Option A
         best_cards = hand_ranking[1]
         if isinstance(best_cards, list):
             print("Best 5 Cards:", tuple(best_cards))
+            print(calculate_outs_two_missing_cards(full_hand, ranks_order, hand_ranking_map))
 
-def run_hand_input_tests(): #Option B
+def run_user_input_tests(): #Option B
     import test_Cases_input
     failed_tests = []
     total_tests = 0
+
     for test_case, data in test_Cases_input.test_cases.items():
         total_tests = total_tests + 1
         print(f"Test Case: {test_case}")
         print("Input Data:", data)
-        user_cards_tuples = data['user_cards']
-        board_cards_tuples = data['community_cards']
-        if user_cards_tuples == data['expected_user_cards'] and board_cards_tuples == data['expected_board_cards']:
-            print("Test Passed")
-        else:
-            print("Test Failed")
-            print(f"Expected User Cards: {data['expected_user_cards']}; Actual: {user_cards_tuples}")
-            print(f"Expected Board Cards: {data['expected_board_cards']}; Actual: {board_cards_tuples}")
+
+        def dummy_cards_input(prompt, num_cards):
+            if data["expected_output"] != "Valid input":
+                raise Exception(data["expected_output"])
+            if prompt == "user":
+                return data["user_cards"]
+            elif prompt == "board":
+                return data["community_cards"]
+
+        def dummy_check_duplicates(cards):
+            return len(cards) != len(set(cards))
+
+        original_cards_input = globals().get("cards_input")
+        original_check_duplicates = globals().get("check_duplicates")
+
+        globals()["cards_input"] = dummy_cards_input
+        globals()["check_duplicates"] = dummy_check_duplicates
+
+        try:
+            user_cards_tuples, board_cards_tuples = user_input()
+            expected_user = [(card[0], card[1]) for card in data["user_cards"]]
+            expected_board = [(card[0], card[1]) for card in data["community_cards"]]
+            if user_cards_tuples == expected_user and board_cards_tuples == expected_board:
+                print("Test Passed")
+            else:
+                print("Test Failed")
+                failed_tests.append(test_case)
+        except Exception as e:
+            print("Test Failed with Exception:", e)
             failed_tests.append(test_case)
         print()
+
     print(f"Total tests run: {total_tests}")
     print(f"Number of tests failed: {len(failed_tests)}")
     if failed_tests:
@@ -525,7 +593,7 @@ def main():
     if choice == "A":
         process_input()
     elif choice == "B":
-        run_hand_input_tests()
+        run_user_input_tests()
     elif choice == "C":
         run_hand_ranking_tests()
     else:
@@ -534,38 +602,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-def calculate_outs_two_missing_cards(full_hand, ranks_order, hand_ranking_map):
-    current_eval = evaluate_hand(full_hand, ranks_order)
-    current_ranking = current_eval[0]
-    current_value = hand_ranking_map[current_ranking]
-
-    deck = []
-    for rank in ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"]:
-        for suit in ["C", "D", "H", "S"]:
-            deck.append((rank, suit))
-
-    unseen_cards = []
-    for card in deck:
-        if card not in full_hand:
-            unseen_cards.append(card)
-
-    outs = {}
-
-    for turn_card in unseen_cards:
-        remaining_cards = [card for card in unseen_cards if card != turn_card]
-        for river_card in remaining_cards:
-            new_hand = full_hand + [turn_card] + [river_card]
-            new_eval = evaluate_hand(new_hand, ranks_order) 
-            new_ranking = new_eval[0]
-            new_value = hand_ranking_map[new_ranking]
-            if new_value < current_value:
-                if new_ranking not in outs:
-                    outs[new_ranking] = []
-                outs[new_ranking].append((turn_card, river_card))
-    
-    n = len(unseen_cards)
-    total_combinations = n * (n - 1) // 2  
-    total_outs = sum(len(v) for v in outs.values())
-    probability = total_outs / total_combinations
-    print("Outs:", outs, "\nProbability:", probability)
-    return outs, probability
